@@ -12,9 +12,9 @@
 - `<h1></h1>`: Titulos de la pagina.
 - `<img>`: Inserta imagenes. Ejemplo `<img src="ruta" alt="texto alternativo">`
 
-- `<figure>...</figure>`: Seccion donde se coloca imagen.
+- `<figure>...</figure>`: Seccion donde se colocan imagenes.
 
-- `<figcaption>...</figcaption>`: Texto descriptor de la imagen.
+- `<figcaption>...</figcaption>`: Texto descriptor de una imagen.
 
 - `<p>...</p>`: Informacion de tipo parrafo.
 
