@@ -21,12 +21,13 @@
 - Selector por hijos: `A > B` selecciona todos los `B` que son hijos directos de `A`.
   
 ### Pseudoclases
-- `:hover`: Se activa el selector al pasar el mouse encima del elemento. 
+
+- `:hover`: Se activa el selector al pasar el mouse encima del elemento.
 
 - `:focus`: Se activa el selector al hacer click o presionar con un táctil encima del elemento.
   
 - `:active`: Se activa el selector mientras que se está interactuando con el elemento. Si se va a utilizar junto con `:hover`, este debe después.
- 
+
 - `:visited`: Se activa el selector cuando ya se visitó un determinado enlace con la etiqueta `<a>...<\a>`.
 
 ## Propiedades

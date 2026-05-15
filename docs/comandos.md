@@ -75,6 +75,6 @@ Al final de cada mensaje se deberá colocar una de las siguientes closing keywor
 
 gh auth login: Se loguea a github.
 
-gh repo clone <repositorio>: Clona el repositorio indicado.
+gh repo clone \<repositorio\>: Clona el repositorio indicado.
 
 - Agrega archivos a la etapa de staging. `git add [archivo]...`
