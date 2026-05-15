@@ -1,16 +1,52 @@
-.listaProductos li{
-  display: inline-block;
-}
-
-.testimonio blockquote {
-    color: var(--medio);
-    font-style: italic;
-    line-height: 1.6;
+h2 {
+  margin: 0;
 }
 
 .imagenProducto {
-    max-width: 150px;
-    height: auto;
+  max-width: 300px;
+  height: auto;
+}
+
+.cajaTablaCobertura {
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  text-align: center;
+}
+
+.listaProductos, .listaTestimonios {
+  display: flex;
+  list-style-type: none;
+}
+
+.listaProductos {
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.listaProductos li figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+}
+
+.listaTestimonios {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.testimonio blockquote {
+  color: var(--medio);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.testimonio {
+  margin: 0;
 }
 
 .testimonio img {
