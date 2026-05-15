@@ -19,6 +19,7 @@ table {
 .listaProductos, .listaTestimonios {
   display: flex;
   list-style-type: none;
+  padding: 0;
 }
 
 .listaProductos {
