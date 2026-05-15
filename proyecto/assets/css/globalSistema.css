@@ -2,36 +2,6 @@ body {
     background-color: var(--grisClaro);
 }
 
-/* Encabezado interno */
-
-header {
-    background-color: var(--oscuro);
-    color: var(--blancoPuro);
-}
-
-header h1 {
-    color: var(--blancoPuro);
-    font-size: 26px;
-    font-weight: 700;
-}
-
-header .botonNavegacion {
-    background-color: var(--medio);
-    color: var(--blancoPuro);
-    font-size: 16px;
-}
-
-header .botonNavegacion:hover,
-header .botonNavegacion:focus {
-    background-color: var(--amarillo);
-    color: var(--oscuro);
-}
-
-header .botonNavegacion:active {
-    background-color: var(--gris);
-    color: var(--oscuro);
-}
-
 .seccionTablaEmpleados {
     background-color: var(--blancoPuro);
     color: var(--oscuro);
