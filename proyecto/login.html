@@ -30,15 +30,18 @@
             <h2>Ingreso al sistema</h2>
             <form action="administrador.html" method="post">
                 <fieldset>
-                    <label for="cedula">Cédula</label>
-                    <input type="text" id="cedula" name="cedula" autocomplete="username" pattern="[1-9][0-9]{7}"
-                        title="Ingrese exactamente 8 dígitos sin puntos ni guiones" inputmode="numeric" maxlength="8"
-                        required>
-
-                    <label for="clave">Contraseña</label>
-                    <input type="password" id="clave" name="clave" autocomplete="current-password" minlength="12"
-                        required>
-
+                    <legend>Inicio de sesión</legend>
+                    <div class="cajaEntradaDeDatos">
+                        <label for="cedula">Cédula</label>
+                        <input type="text" id="cedula" name="cedula" autocomplete="username" pattern="[1-9][0-9]{7}"
+                            title="Ingrese exactamente 8 dígitos sin puntos ni guiones" inputmode="numeric"
+                            maxlength="8" required>
+                    </div>
+                    <div class="cajaEntradaDeDatos">
+                        <label for="clave">Contraseña</label>
+                        <input type="password" id="clave" name="clave" autocomplete="current-password" minlength="12"
+                            required>
+                    </div>
                 </fieldset>
 
                 <button type="submit">Iniciar Sesión</button>
