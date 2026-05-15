@@ -1,16 +1,29 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .seccionLogin {
     background-color: var(--blancoPuro);
     color: var(--medio);
     font-family: 'Barlow', sans-serif;
     text-align: center;
     line-height: 1.7;
-    max-width: 520px;
-    min-height: 300px;
+    margin: 0;
+    height: auto;
 }
 
 .seccionLogin h2 {
     color: var(--medio);
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 700;
     text-transform: uppercase;
 }
@@ -18,28 +31,39 @@
 .seccionLogin form {
     background-color: var(--blancoPuro);
     color: var(--oscuro);
-    max-width: 420px;
+    width: 100%;
 }
 
 .seccionLogin legend {
     color: var(--oscuro);
-    font-size: 20px;
+    font-size: 1.1rem;
     font-weight: 700;
     text-transform: uppercase;
 }
 
+.seccionLogin fieldset {
+    margin-bottom: 1rem;
+}
+
+.cajaEntradaDeDatos {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
 .seccionLogin label {
     color: var(--oscuro);
-    font-size: 15px;
+    font-size: 0.9rem;
     font-weight: 600;
     text-align: left;
 }
 
 .seccionLogin input {
     width: 100%;
-    max-width: 360px;
     font-family: 'Barlow', sans-serif;
-    font-size: 16px;
+    font-size: 1rem;
     color: var(--oscuro);
     background-color: var(--grisClaro);
 }
@@ -50,14 +74,13 @@
 }
 
 .seccionLogin button {
-    width: 100%;
-    max-width: 360px;
     background-color: var(--amarillo);
     color: var(--oscuro);
     font-family: 'Barlow', sans-serif;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
+    width: 100%;
 }
 
 .seccionLogin button:hover,
@@ -69,8 +92,4 @@
 .seccionLogin button:active {
     background-color: var(--oscuro);
     color: var(--amarillo);
-}
-
-footer {
-    max-width: 520px;
 }
