@@ -1,5 +1,14 @@
 body {
-    background-color: var(--grisClaro);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .seccionTablaEmpleados {
@@ -10,7 +19,7 @@ body {
 
 .seccionTablaEmpleados h2 {
     color: var(--oscuro);
-    font-size: 24px;
+    font-size: 1.2rem;
     font-weight: 700;
     text-transform: uppercase;
 }
@@ -18,6 +27,7 @@ body {
 tr:hover td {
     background-color: var(--blancoCristal);
     color: var(--oscuro);
+    cursor: pointer;
 }
 
 tr:active td {
@@ -28,36 +38,19 @@ tr:active td {
 .seccionOperaciones {
     background-color: var(--oscuro);
     color: var(--blancoPuro);
-    min-height: 160px;
     text-align: center;
+    padding: 0;
 }
 
 .seccionOperaciones h2 {
     color: var(--amarillo);
-    font-size: 24px;
+    font-size: 1.2rem;
     font-weight: 700;
     text-transform: uppercase;
+    margin: 1rem;
 }
 
-.seccionOperaciones ul {
-    list-style-type: none;
-}
-
-.seccionOperaciones li {
-    line-height: 2.5;
-}
-
-.botonOperacion {
-    background-color: var(--medio);
-    color: var(--blancoPuro);
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.botonOperacion:hover,
-.botonOperacion:focus {
+.botonOperacion:hover {
     background-color: var(--amarillo);
     color: var(--oscuro);
 }
@@ -65,4 +58,27 @@ tr:active td {
 .botonOperacion:active {
     background-color: var(--gris);
     color: var(--oscuro);
+}
+
+.operaciones {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    list-style-type: none;
+    padding: 0 0 1rem 0;
+    margin: 0;
+}
+
+.operaciones li {
+    align-items: stretch;
+}
+
+.botonOperacion {
+    display: flex;
+    justify-content: center;
+    color: var(--blancoPuro);
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 600;
+    width: 100%;
 }

@@ -40,18 +40,28 @@
             <form action="formularioExitoso.html" method="post">
                 <fieldset>
                     <legend>Espacio de solicitud</legend>
+                    <div class="cajaEntradaDeDatos">
+                        <label for="correoElectronico">Correo electrónico</label>
+                        <input type="email" name="correoElectronico" id="correoElectronico"
+                            placeholder="Ingrese su correo electrónico" autocomplete="email" required>
+                    </div>
 
-                    <label for="correoElectronico">Correo electrónico</label>
-                    <input type="email" name="correoElectronico" id="correoElectronico" placeholder="Ingrese su correo electrónico" autocomplete="email" required>
+                    <div class="cajaEntradaDeDatos">
+                        <label for="curriculumVitae">Currículum Vitae (PDF)</label>
+                        <input type="file" name="curriculumVitae" id="curriculumVitae" accept=".pdf,application/pdf"
+                            required>
+                    </div>
 
-                    <label for="curriculumVitae">Currículum Vitae (PDF)</label>
-                    <input type="file" name="curriculumVitae" id="curriculumVitae" accept=".pdf,application/pdf" required>
+                    <div class="cajaEntradaDeDatos cajaTextarea">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea name="mensaje" id="mensaje" placeholder="Escriba su mensaje" autocomplete="off"
+                            required></textarea>
+                    </div>
 
-                    <label for="mensaje">Mensaje</label>
-                    <textarea name="mensaje" id="mensaje" placeholder="Escriba su mensaje" autocomplete="off" required></textarea>
-
-                    <input type="checkbox" name="aceptaContacto" id="aceptaContacto" required>
-                    <label for="aceptaContacto">Acepto ser contactado por la empresa</label>
+                    <div class="cajaEntradaDeDatos cajaCheckbox">
+                        <input type="checkbox" name="aceptaContacto" id="aceptaContacto" required>
+                        <label for="aceptaContacto">Acepto ser contactado por la empresa</label>
+                    </div>
 
                     <button type="submit">Enviar</button>
                 </fieldset>

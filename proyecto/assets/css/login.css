@@ -45,14 +45,6 @@ main {
     margin-bottom: 1rem;
 }
 
-.cajaEntradaDeDatos {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.5rem;
-}
-
 .seccionLogin label {
     color: var(--oscuro);
     font-size: 0.9rem;
