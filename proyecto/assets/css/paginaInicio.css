@@ -3,7 +3,7 @@ h2 {
 }
 
 .imagenProducto {
-  max-width: 300px;
+  max-width: 50vw;
   height: auto;
 }
 
@@ -25,6 +25,7 @@ table {
 .listaProductos {
   flex-direction: row;
   justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 .listaProductos li figure {
@@ -38,6 +39,7 @@ table {
 .listaTestimonios {
   flex-direction: row-reverse;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .testimonio blockquote {

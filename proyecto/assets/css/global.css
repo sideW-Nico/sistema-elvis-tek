@@ -28,7 +28,11 @@ header {
   background-color: var(--oscuro);
   color: var(--blancoPuro);
   min-height: 3.5rem;
+  position: sticky;
+  top: 0px;
+  z-index: 100;
 }
+
 
 header h1 {
   color: var(--blancoPuro);
@@ -45,7 +49,11 @@ nav {
   margin-left: 2rem;
 }
 
-nav ul {
+.btnMenu, .btnCerrarMenu {
+  display: none;
+}
+
+.listaNavegacion {
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -97,9 +105,27 @@ h6 {
   color: var(--oscuro);
 }
 
-.botonNavegacion:active {
+.botonNavegacion:active, .btnMenu:active {
   background-color: var(--gris);
   color: var(--oscuro);
+}
+
+.btnSubir {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    text-decoration: none;
+}
+
+.btnSubir i {
+    color: var(--oscuro);
+    font-size: 2.5rem;
 }
 
 section {
@@ -166,4 +192,57 @@ footer a:focus {
 
 footer a:active {
   color: var(--gris);
+}
+
+@media (max-width: 480px) {
+  .logo {
+    display: none;
+  }
+
+  header h1 {
+    display: none;
+  }
+
+  nav {
+    margin-left: auto;
+    align-items: center;
+  }
+
+  .btnMenu, .btnCerrarMenu {
+    display: flex;
+    align-items: center;
+    background-color: var(--oscuro);
+    border: none;
+    padding: 0 0.5rem;
+    height: 100%;
+  }
+
+  .btnMenu img, .btnCerrarMenu img {
+    width: 2rem;
+    height: 2rem;
+    filter: brightness(0) invert(1);
+  }
+
+  .btnCerrarMenu {
+    display: none;
+  }
+
+  .listaNavegacion {
+    display: none;
+    position: fixed;
+    right: 0;
+    top: 3.5rem;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 50vw;
+    height: calc(100vh - 3.5rem);
+    background-color: var(--oscuro);
+    z-index: 100;
+  }
+
+  .listaNavegacion a {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
 }

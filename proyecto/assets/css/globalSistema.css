@@ -77,8 +77,41 @@ tr:active td {
     display: flex;
     justify-content: center;
     color: var(--blancoPuro);
+    background-color: var(--oscuro);
+    border: none;
     text-decoration: none;
     font-size: 1.25rem;
     font-weight: 600;
     width: 100%;
+    padding: 0.5rem 0;
+}
+
+.seccionAltaEmpleado {
+    display: none;
+    position: fixed;
+    top: auto;
+    left: auto;
+    z-index: 101;
+}
+
+.btnCerrarAltaEmpleado {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    margin-left: auto;
+}
+
+.btnCerrarAltaEmpleado img {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0;
+    padding: 0;
+    filter: brightness(0) invert(1);
+}
+
+@media (max-width: 480px) {
+    main {
+        flex-direction: column-reverse;
+    }
 }
