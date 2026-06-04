@@ -194,9 +194,23 @@ footer a:active {
   color: var(--gris);
 }
 
-@media (max-width: 480px) {
-  .logo {
+@media (min-width: 769px) and (max-width: 1024px) {
+  .botonNavegacion {
+    font-size: 0.85rem;
+  }
+
+  header h1 {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 20px;
+  }
+
+  .logo {
+    display: flex;
   }
 
   header h1 {
@@ -209,7 +223,6 @@ footer a:active {
   }
 
   .btnMenu, .btnCerrarMenu {
-    display: flex;
     align-items: center;
     background-color: var(--oscuro);
     border: none;
@@ -223,8 +236,20 @@ footer a:active {
     filter: brightness(0) invert(1);
   }
 
+   .btnMenu {
+    display: flex;
+  }
+
   .btnCerrarMenu {
     display: none;
+  }
+
+  .btnMenu.oculto {
+    display: none;
+  }
+
+  .btnCerrarMenu.visible {
+    display: flex;
   }
 
   .listaNavegacion {
@@ -238,6 +263,10 @@ footer a:active {
     height: calc(100vh - 3.5rem);
     background-color: var(--oscuro);
     z-index: 100;
+  }
+
+  .listaNavegacion.visible {
+    display: flex;
   }
 
   .listaNavegacion a {

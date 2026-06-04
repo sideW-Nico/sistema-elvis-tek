@@ -86,14 +86,6 @@ tr:active td {
     padding: 0.5rem 0;
 }
 
-.seccionAltaEmpleado {
-    display: none;
-    position: fixed;
-    top: auto;
-    left: auto;
-    z-index: 101;
-}
-
 .btnCerrarAltaEmpleado {
     display: flex;
     align-items: center;
@@ -110,7 +102,7 @@ tr:active td {
     filter: brightness(0) invert(1);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     main {
         flex-direction: column-reverse;
     }

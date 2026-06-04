@@ -42,27 +42,10 @@
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th>Cargo</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>12345678</td>
-                        <td>Fulano</td>
-                        <td>De Tal</td>
-                        <td>Transporte</td>
-                    </tr>
-                    <tr>
-                        <td>23456789</td>
-                        <td>Juan</td>
-                        <td>Herrero</td>
-                        <td>Gestión</td>
-                    </tr>
-                    <tr>
-                        <td>34567890</td>
-                        <td>Pepe</td>
-                        <td>Sanchez</td>
-                        <td>Transporte</td>
-                    </tr>
+                <tbody id="cuerpoTablaEmpleados">
                 </tbody>
             </table>
         </section>
@@ -70,16 +53,14 @@
             <h2>Operaciones disponibles</h2>
             <ul class="operaciones">
                 <li><button type="button" class="botonOperacion" id="btnAltaEmpleado">Alta Empleado</button></li>
-                <li><button type="button" class="botonOperacion">Baja Empleado</button></li>
-                <li><button type="button" class="botonOperacion">Modificación Empleado</button></li>
             </ul>
         </section>
 
-        <section class="seccionAltaEmpleado seccionFormulario">
+        <dialog class="dialogAltaEmpleado seccionFormulario">
             <button class="btnCerrarAltaEmpleado" id="btnCerrarAltaEmpleado" type="button">
                 <img src="assets/img/x.svg" alt="Cerrar Menú" class="iconoMenu">
             </button>
-            <form action="administrador.html" method="post">
+            <form action="administrador.html" method="post" id="formularioAltaEmpleado">
                 <fieldset>
                     <legend>Gestión de empleado</legend>
 
@@ -110,11 +91,11 @@
                             <label for="cargo">Cargo</label>
                             <select name="cargo" id="cargo" required>
                                 <option value="" disabled selected>Seleccione un cargo</option>
-                                <option value="transporte">Transporte</option>
-                                <option value="gestion">Gestión</option>
-                                <option value="administrativo">Administrativo</option>
-                                <option value="deposito">Depósito</option>
-                                <option value="logistica">Logística</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Gestión">Gestión</option>
+                                <option value="Administrativo">Administrativo</option>
+                                <option value="Depósito">Depósito</option>
+                                <option value="Logística">Logística</option>
                             </select>
                         </div>
                     </fieldset>
@@ -122,7 +103,7 @@
                     <button type="submit">Guardar empleado</button>
                 </fieldset>
             </form>
-        </section>
+        </dialog>
     </main>
     <a href="#inicio" class="btnSubir">
         <i class="bi bi-caret-up-fill"></i>
@@ -132,7 +113,7 @@
         <p>© 2026 Todo en Blanco</p>
     </footer>
     <script src="assets/js/barraNavegacion.js"></script>
-    <script src="assets/js/administrador.js"></script>
+    <script src="assets/js/gestionEmpleados.js"></script>
 </body>
 
 </html>

@@ -1,13 +1,18 @@
-document.getElementById("btnMenu").addEventListener("click", function () {
+const btnMenu = document.getElementById("btnMenu");
+const btnCerrarMenu = document.getElementById("btnCerrarMenu");
+const listaNavegacion = document.querySelector(".listaNavegacion");
 
-    document.querySelector(".listaNavegacion").style.display = "flex";
-    document.querySelector(".btnCerrarMenu").style.display = "flex";
-    document.querySelector(".btnMenu").style.display = "none";
-});
+function abrirMenu() {
+    listaNavegacion.classList.add("visible");
+    btnCerrarMenu.classList.add("visible");
+    btnMenu.classList.add("oculto");
+}
 
-document.getElementById("btnCerrarMenu").addEventListener("click", function () {
+function cerrarMenu() {
+    listaNavegacion.classList.remove("visible");
+    btnCerrarMenu.classList.remove("visible");
+    btnMenu.classList.remove("oculto");
+}
 
-    document.querySelector(".listaNavegacion").style.display = "none";
-    document.querySelector(".btnCerrarMenu").style.display = "none";
-    document.querySelector(".btnMenu").style.display = "flex";
-});
+btnMenu.addEventListener("click", abrirMenu);
+btnCerrarMenu.addEventListener("click", cerrarMenu);

@@ -45,8 +45,7 @@
     font-weight: 600;
 }
 
-.seccionFormulario button:hover,
-.seccionFormulario button:focus {
+.seccionFormulario button:hover {
     background-color: var(--amarillo);
     color: var(--oscuro);
 }
