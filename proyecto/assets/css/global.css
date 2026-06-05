@@ -21,7 +21,7 @@ body {
   margin: 0;
 }
 
-header {
+.barraNavegacion {
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -34,7 +34,7 @@ header {
 }
 
 
-header h1 {
+.barraNavegacion h1 {
   color: var(--blancoPuro);
   font-size: 1.5rem;
   font-weight: 700;
@@ -199,7 +199,7 @@ footer a:active {
     font-size: 0.85rem;
   }
 
-  header h1 {
+  .barraNavegacion h1 {
     display: none;
   }
 }
@@ -213,7 +213,7 @@ footer a:active {
     display: flex;
   }
 
-  header h1 {
+  .barraNavegacion h1 {
     display: none;
   }
 

@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <header>
+    <header class="barraNavegacion">
         <img src="assets/img/imagen_generica.png" alt="Logo de la empresa" class="logo">
         <h1>Todo en blanco</h1>
 
@@ -33,7 +33,11 @@
     </header>
     <main>
         <section class="seccionTablaEmpleados">
-            <h2>Datos de empleados</h2>
+            <header class="cajaEncabezado">
+                <h2>Datos de empleados</h2>
+                <button type="button" class="botonOperacion" id="btnAltaEmpleado">Alta Empleado</button>
+            </header>
+            
             <table>
                 <caption>Listado de empleados registrados</caption>
                 <thead>
@@ -48,12 +52,6 @@
                 <tbody id="cuerpoTablaEmpleados">
                 </tbody>
             </table>
-        </section>
-        <section class="seccionOperaciones">
-            <h2>Operaciones disponibles</h2>
-            <ul class="operaciones">
-                <li><button type="button" class="botonOperacion" id="btnAltaEmpleado">Alta Empleado</button></li>
-            </ul>
         </section>
 
         <dialog class="dialogAltaEmpleado seccionFormulario">

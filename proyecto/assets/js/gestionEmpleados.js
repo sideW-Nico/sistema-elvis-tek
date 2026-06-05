@@ -60,6 +60,9 @@ function agregarFilaEmpleado (empleado) {
 
     //Espacio para colocar los botones
     const campoOperaciones = document.createElement("td");
+    
+    const cajaOperaciones = document.createElement("div");
+    cajaOperaciones.classList.add("cajaOperaciones");
 
     const btnModificar = document.createElement("button");
     btnModificar.type = "button";
@@ -71,9 +74,11 @@ function agregarFilaEmpleado (empleado) {
     btnEliminar.textContent = "Eliminar";
     btnEliminar.classList.add("botonOperacion")
 
-    //Agregar botones al campo de operaciones
-    campoOperaciones.appendChild(btnModificar);
-    campoOperaciones.appendChild(btnEliminar);
+    //Agregar botones a la caja de operaciones
+    cajaOperaciones.appendChild(btnModificar);
+    cajaOperaciones.appendChild(btnEliminar);
+
+    campoOperaciones.appendChild(cajaOperaciones);
 
     //Cargar todos los datos (td) a la fila (tr)
     fila.appendChild(campoCedula);
