@@ -84,7 +84,7 @@ h6 {
   margin: 0 1rem;
 }
 
-.botonNavegacion {
+.btnNavegacion {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,13 +99,13 @@ h6 {
   padding: 0 0.75rem;
 }
 
-.botonNavegacion:hover,
-.botonNavegacion:focus {
+.btnNavegacion:hover,
+.btnNavegacion:focus {
   background-color: var(--amarillo);
   color: var(--oscuro);
 }
 
-.botonNavegacion:active, .btnMenu:active {
+.btnNavegacion:active, .btnMenu:active {
   background-color: var(--gris);
   color: var(--oscuro);
 }
@@ -195,7 +195,7 @@ footer a:active {
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-  .botonNavegacion {
+  .btnNavegacion {
     font-size: 0.85rem;
   }
 
