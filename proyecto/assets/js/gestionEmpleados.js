@@ -64,6 +64,23 @@ function abrirModificarEmpleado(empleado) {
  * OBTENCION Y RECUPERACION DE DATOS
  */
 
+//Carga los empleados guardados en el local storage
+function cargarEmpleadosGuardadosLocal () {
+    //Captura los empleados en formato string, la estructura se encuentra en JSON
+    const empleadosGuardados = localStorage.getItem("empleados");
+
+    //Si retorna null implica que el almacenamiento local está vacío o no existe ninguna llave con ese nombre
+    if (empleadosGuardados === null) return [];
+
+    /*
+        Convierte los elementos en string que se encuentran en formato JSON a un objeto literal.
+        El objeto literal "empleadosGuardados" almacena otros objetos literales, donde cada
+        uno representa a un empleado.
+    */
+    return JSON.parse(empleadosGuardados);
+}
+
+
 //Función que captura los datos del formulario de gestión de empleado. Guarda los valores en un objeto literal y retorna su resultado.
 function obtenerDatosEmpleado() {
     const cedula = entradaCedula.value;
@@ -129,7 +146,7 @@ function agregarFilaEmpleado(empleado) {
     btnModificar.classList.add("btnOperacion");
     
     //Se agrega el evento para modificar la fila correspondiente
-    btnModificar.addEventListener("click", modificarFilaEmpleado);
+    btnModificar.addEventListener("click", modificarEmpleado);
 
 
     const btnEliminar = document.createElement("button");
@@ -138,7 +155,7 @@ function agregarFilaEmpleado(empleado) {
     btnEliminar.classList.add("btnOperacion");
 
     //Se agrega el evento para eliminar la fila correspondiente
-    btnEliminar.addEventListener("click", eliminarFilaEmpleado);
+    btnEliminar.addEventListener("click", eliminarEmpleado);
 
     //Agregar botones a la caja de operaciones
     cajaOperaciones.appendChild(btnModificar);
@@ -156,18 +173,52 @@ function agregarFilaEmpleado(empleado) {
     cuerpoTablaEmpleados.appendChild(fila);
 }
 
-function eliminarFilaEmpleado(eventoBajaEmpleado) {
+//Función que actualiza la tabla, se la utilizará siempre que se haga ABM
+function actualizarTabla () {
+    //Elimina todos los hijos que se encuentran dentro de la tabla
+    cuerpoTablaEmpleados.replaceChildren();
+
+    //Carga los empleados ubicados en local storage como un objeto literal
+    const empleados = cargarEmpleadosGuardadosLocal();
+
+    //Recorre con un foreach recuperando cada colección de datos de un empleado y lo guarda como un objeto literal
+    for (const empleado of empleados) {
+        agregarFilaEmpleado(empleado);
+    }
+
+}
+
+function eliminarEmpleadoLocal(cedula) {
+    const empleados = cargarEmpleadosGuardados();
+
+    //Crea un nuevo array donde sólo están los empleados que no coinciden con la cédula especificada
+    const empleadosActualizados = empleados.filter(empleado => {
+        return empleado.cedula !== cedula;
+    });
+
+    //Guarda el nuevo array en el localStorage
+    actualizarEmpleadosLocal(empleadosActualizados);
+}
+
+function eliminarEmpleado(eventoBajaEmpleado) {
     //Referencia directamente al boton presionado
     const botonPresionado = eventoBajaEmpleado.currentTarget;
 
     //Trata de buscar la fila mas cercana, captura su fila por estar anidada en ella
     const filaEmpleado = botonPresionado.closest('tr');
 
-    //Elimina el nodo del DOM.
-    filaEmpleado.remove();
+    //Recupera la cédula del empleado para buscar su posición dentro de la colección de empleados
+    const cedula = filaEmpleado.cells[0].textContent;
+    
+    eliminarEmpleadoLocal(cedula);
+    actualizarTabla();
 }
 
-function modificarFilaEmpleado(eventoModificarEmpleado) {
+function modificarEmpleadoLocal (cedula) {
+    
+}
+
+function modificarEmpleado(eventoModificarEmpleado) {
     //Referencia directamente al boton presionado
     const botonPresionado = eventoModificarEmpleado.currentTarget;
 
@@ -196,6 +247,20 @@ function actualizarFilaEmpleado(filaEmpleado, empleado) {
  * FUNCIONALIDADES PRINCIPALES
  */
 
+function actualizarEmpleadosLocal(empleados) {
+    localStorage.setItem("empleados", JSON.stringify(empleados));
+}
+
+function guardarNuevoEmpleadoLocal (empleado) {
+    const empleados = cargarEmpleadosGuardados();
+
+    //Agrega un objeto literal a la colección de empleados
+    empleados.push(empleado);
+
+    //Refresca la tabla
+    actualizarEmpleadosLocal(empleados);
+}
+
 //Función centralizadora, se dedica a conectar las funcionalidades en cadena.
 function ingresarEmpleado(eventoFormulario) {
     eventoFormulario.preventDefault();
@@ -207,7 +272,8 @@ function ingresarEmpleado(eventoFormulario) {
      * Si contiene una fila, el formulario está en modo modificación.
      */
     if (filaEmpleadoEnEdicion === null) {
-        agregarFilaEmpleado(empleado);
+        guardarNuevoEmpleadoLocal(empleado);
+        actualizarTabla();
     } else {
         actualizarFilaEmpleado(filaEmpleadoEnEdicion, empleado);
     }
