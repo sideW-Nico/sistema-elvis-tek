@@ -20,7 +20,7 @@ const entradaApellido = document.getElementById("apellido");
 const entradaCargo = document.getElementById("cargo");
 
 //Auxiliar para guardar datos vinculados la modificacion de un empleado
-let filaEmpleadoEnEdicion = null;
+let empleadoEnEdicion = false;
 
 
 /**
@@ -29,7 +29,7 @@ let filaEmpleadoEnEdicion = null;
 
 //Limpia todos los campos y configuraciones seleccionadas del formulario
 function limpiarEstadoGestionarEmpleado() {
-    filaEmpleadoEnEdicion = null;
+    empleadoEnEdicion = false;
     entradaCedula.readOnly = false;
     formularioGestionarEmpleado.reset();
 }
@@ -48,11 +48,25 @@ function cerrarGestionarEmpleado() {
     dialogGestionarEmpleado.close();
 }
 
-function abrirModificarEmpleado(empleado) {
-    entradaCedula.value = empleado.cedula;
-    entradaNombre.value = empleado.nombre;
-    entradaApellido.value = empleado.apellido;
-    entradaCargo.value = empleado.cargo;
+function abrirModificarEmpleado(cedula) {
+    //Cambia el estado de la variable para indicar que el formulario es para modificar un empleado existente
+    empleadoEnEdicion = true;
+
+    const empleados = cargarEmpleadosGuardadosLocal();
+
+    //Busca y retorna el primer empleado que coincida con la cedula
+    const empleadoAModificar = empleados.find(empleado => { return empleado.cedula === cedula });
+
+    //Si el empleado no existe por x razones, sale de la función evitando usar el modal
+    if (empleadoAModificar === undefined) {
+        //Esta sección se puede complementar con la apertura de un modal indicando un mensaje de error al usuario
+        return;
+    }
+
+    entradaCedula.value = empleadoAModificar.cedula;
+    entradaNombre.value = empleadoAModificar.nombre;
+    entradaApellido.value = empleadoAModificar.apellido;
+    entradaCargo.value = empleadoAModificar.cargo;
 
     //Deshabilita la posibildad de modificar la cedula de identidad
     entradaCedula.readOnly = true;
@@ -82,27 +96,12 @@ function cargarEmpleadosGuardadosLocal () {
 
 
 //Función que captura los datos del formulario de gestión de empleado. Guarda los valores en un objeto literal y retorna su resultado.
-function obtenerDatosEmpleado() {
-    const cedula = entradaCedula.value;
-    const nombre = entradaNombre.value;
-    const apellido = entradaApellido.value;
+function obtenerDatosFormularioEmpleado() {
+    //La función trim recorta y quita espacios vacíos de un string
+    const cedula = entradaCedula.value.trim();
+    const nombre = entradaNombre.value.trim();
+    const apellido = entradaApellido.value.trim();
     const cargo = entradaCargo.value;
-
-    const empleado = {
-        cedula: cedula,
-        nombre: nombre,
-        apellido: apellido,
-        cargo: cargo
-    };
-
-    return empleado;
-}
-
-function recuperarDatosFilaEmpleado(filaEmpleado) {
-    const cedula = filaEmpleado.cells[0].textContent;
-    const nombre = filaEmpleado.cells[1].textContent;
-    const apellido = filaEmpleado.cells[2].textContent;
-    const cargo = filaEmpleado.cells[3].textContent;
 
     const empleado = {
         cedula: cedula,
@@ -146,7 +145,7 @@ function agregarFilaEmpleado(empleado) {
     btnModificar.classList.add("btnOperacion");
     
     //Se agrega el evento para modificar la fila correspondiente
-    btnModificar.addEventListener("click", modificarEmpleado);
+    btnModificar.addEventListener("click", abrirModificarEmpleado(empleado.cedula));
 
 
     const btnEliminar = document.createElement("button");
@@ -155,7 +154,7 @@ function agregarFilaEmpleado(empleado) {
     btnEliminar.classList.add("btnOperacion");
 
     //Se agrega el evento para eliminar la fila correspondiente
-    btnEliminar.addEventListener("click", eliminarEmpleado);
+    btnEliminar.addEventListener("click", eliminarEmpleadoLocal(empleado.cedula));
 
     //Agregar botones a la caja de operaciones
     cajaOperaciones.appendChild(btnModificar);
@@ -178,10 +177,10 @@ function actualizarTabla () {
     //Elimina todos los hijos que se encuentran dentro de la tabla
     cuerpoTablaEmpleados.replaceChildren();
 
-    //Carga los empleados ubicados en local storage como un objeto literal
+    //Carga los empleados ubicados en localStorage como un array de objetos literales
     const empleados = cargarEmpleadosGuardadosLocal();
 
-    //Recorre con un foreach recuperando cada colección de datos de un empleado y lo guarda como un objeto literal
+    //Recorre el array de empleados y crea una fila por cada empleado
     for (const empleado of empleados) {
         agregarFilaEmpleado(empleado);
     }
@@ -189,58 +188,33 @@ function actualizarTabla () {
 }
 
 function eliminarEmpleadoLocal(cedula) {
-    const empleados = cargarEmpleadosGuardados();
+    const empleados = cargarEmpleadosGuardadosLocal();
 
     //Crea un nuevo array donde sólo están los empleados que no coinciden con la cédula especificada
-    const empleadosActualizados = empleados.filter(empleado => {
-        return empleado.cedula !== cedula;
-    });
+    const empleadosActualizados = empleados.filter(empleado => { return empleado.cedula !== cedula });
 
     //Guarda el nuevo array en el localStorage
     actualizarEmpleadosLocal(empleadosActualizados);
-}
-
-function eliminarEmpleado(eventoBajaEmpleado) {
-    //Referencia directamente al boton presionado
-    const botonPresionado = eventoBajaEmpleado.currentTarget;
-
-    //Trata de buscar la fila mas cercana, captura su fila por estar anidada en ella
-    const filaEmpleado = botonPresionado.closest('tr');
-
-    //Recupera la cédula del empleado para buscar su posición dentro de la colección de empleados
-    const cedula = filaEmpleado.cells[0].textContent;
-    
-    eliminarEmpleadoLocal(cedula);
     actualizarTabla();
 }
 
-function modificarEmpleadoLocal (cedula) {
+function modificarEmpleadoLocal (empleadoEnFormulario) {
+    const empleados = cargarEmpleadosGuardadosLocal();
+
+    const empleadoAModificar = empleados.find(empleado => { return empleado.cedula === empleadoEnFormulario.cedula });
+
+    //Si el empleado no existe por x razones, deteniendo el proceso
+    if (empleadoAModificar === undefined) {
+        //Esta sección se puede complementar con la apertura de un modal indicando un mensaje de error al usuario
+        return;
+    }
+
+    empleadoAModificar.nombre = empleadoEnFormulario.nombre;
+    empleadoAModificar.apellido = empleadoEnFormulario.apellido;
+    empleadoAModificar.cargo = empleadoEnFormulario.cargo;
     
-}
-
-function modificarEmpleado(eventoModificarEmpleado) {
-    //Referencia directamente al boton presionado
-    const botonPresionado = eventoModificarEmpleado.currentTarget;
-
-    //Trata de buscar la fila mas cercana, captura su fila por estar anidada en ella
-    const filaEmpleado = botonPresionado.closest('tr');
-
-    //Guarda la fila del empleado con los datos originales
-    filaEmpleadoEnEdicion = filaEmpleado;
-
-    //Recupera los datos de la fila
-    const empleado = recuperarDatosFilaEmpleado(filaEmpleado);
-
-    //Abre el modal con el formulario enviando los datos del empleado
-    abrirModificarEmpleado(empleado);
-}
-
-//En caso de ser una modificacion, actualiza la fila de la tabla en base al objeto literal 'empleado'
-function actualizarFilaEmpleado(filaEmpleado, empleado) {
-    filaEmpleado.cells[0].textContent = empleado.cedula;
-    filaEmpleado.cells[1].textContent = empleado.nombre;
-    filaEmpleado.cells[2].textContent = empleado.apellido;
-    filaEmpleado.cells[3].textContent = empleado.cargo;
+    //Guarda el nuevo array en el localStorage
+    actualizarEmpleadosLocal(empleados);
 }
 
 /**
@@ -251,34 +225,41 @@ function actualizarEmpleadosLocal(empleados) {
     localStorage.setItem("empleados", JSON.stringify(empleados));
 }
 
-function guardarNuevoEmpleadoLocal (empleado) {
-    const empleados = cargarEmpleadosGuardados();
+function guardarEmpleadoLocal(empleado) {
+    const empleados = cargarEmpleadosGuardadosLocal();
+
+    const cedulaExistente = empleados.some((empleadoGuardado) => { return empleadoGuardado.cedula === empleado.cedula });
+
+    //Sale de la función si la cedula ya existe
+    if (cedulaExistente) {
+        //Esta sección se puede complementar con la apertura de un modal indicando un mensaje de error al usuario
+        return;
+    }
 
     //Agrega un objeto literal a la colección de empleados
     empleados.push(empleado);
 
-    //Refresca la tabla
     actualizarEmpleadosLocal(empleados);
 }
 
 //Función centralizadora, se dedica a conectar las funcionalidades en cadena.
-function ingresarEmpleado(eventoFormulario) {
+function gestionarEmpleado(eventoFormulario) {
     eventoFormulario.preventDefault();
 
-    const empleado = obtenerDatosEmpleado();
+    const empleado = obtenerDatosFormularioEmpleado();
 
     /**
-     * Si filaEmpleadoEnEdicion es null, el formulario está en modo alta.
-     * Si contiene una fila, el formulario está en modo modificación.
+     * Si empleadoEnEdicion es false, el formulario está en modo alta.
+     * Si es true, el formulario está en modo modificación.
      */
-    if (filaEmpleadoEnEdicion === null) {
-        guardarNuevoEmpleadoLocal(empleado);
-        actualizarTabla();
+    if (!empleadoEnEdicion) {
+        guardarEmpleadoLocal(empleado);
     } else {
-        actualizarFilaEmpleado(filaEmpleadoEnEdicion, empleado);
+        modificarEmpleadoLocal(empleado);
     }
 
     cerrarGestionarEmpleado();
+    actualizarTabla();
 }
 
 /**
@@ -286,7 +267,7 @@ function ingresarEmpleado(eventoFormulario) {
  */
 
 //Actualización de la tabla de Empleados al completar el formulario que se encuentra en el modal
-formularioGestionarEmpleado.addEventListener("submit", ingresarEmpleado);
+formularioGestionarEmpleado.addEventListener("submit", gestionarEmpleado);
 
 //Apertura y cierre del modal
 btnAltaEmpleado.addEventListener("click", abrirAltaEmpleado);
@@ -296,3 +277,4 @@ btnCerrarGestionarEmpleado.addEventListener("click", cerrarGestionarEmpleado);
 //Para hacer que al apretar escape tambien se eliminen los cambios del formulario, se puede usar el evento 'cancel'
 dialogGestionarEmpleado.addEventListener("cancel", limpiarEstadoGestionarEmpleado);
 
+actualizarTabla();
