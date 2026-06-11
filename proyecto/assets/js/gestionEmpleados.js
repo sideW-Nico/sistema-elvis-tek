@@ -145,7 +145,8 @@ function agregarFilaEmpleado(empleado) {
     btnModificar.classList.add("btnOperacion");
     
     //Se agrega el evento para modificar la fila correspondiente
-    btnModificar.addEventListener("click", abrirModificarEmpleado(empleado.cedula));
+                                                //() => { abrirModificarEmpleado(55555555) }
+    btnModificar.addEventListener("click", () => { abrirModificarEmpleado(empleado.cedula) });
 
 
     const btnEliminar = document.createElement("button");
@@ -154,7 +155,7 @@ function agregarFilaEmpleado(empleado) {
     btnEliminar.classList.add("btnOperacion");
 
     //Se agrega el evento para eliminar la fila correspondiente
-    btnEliminar.addEventListener("click", eliminarEmpleadoLocal(empleado.cedula));
+    btnEliminar.addEventListener("click", () => { eliminarEmpleadoLocal(empleado.cedula) } );
 
     //Agregar botones a la caja de operaciones
     cajaOperaciones.appendChild(btnModificar);
