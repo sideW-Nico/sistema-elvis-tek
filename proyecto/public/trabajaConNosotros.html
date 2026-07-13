@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de sesión</title>
+    <title>Trabaja con nosotros</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/global.css">
-    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="stylesheet" href="assets/css/formularios.css">
 </head>
 
 <body>
     <header class="barraNavegacion">
         <img src="assets/img/imagen_generica.png" alt="Logo de la empresa" class="logo">
-        <h1>Todo en blanco</h1>
+        <h1>¡Estamos buscando gente!</h1>
 
         <nav>
             <button class="btnMenu" id="btnMenu" type="button">
@@ -30,31 +30,55 @@
                 <li><a href="sobreNosotros.html" class="btnNavegacion">Sobre Nosotros</a></li>
                 <li><a href="contacto.html" class="btnNavegacion">Contáctanos</a></li>
                 <li><a href="trabajaConNosotros.html" class="btnNavegacion">Trabaja con nosotros</a></li>
-                <li><a href="login.html" class="btnNavegacion">Ingresar al sistema</a></li>
+                <li><a href="login.php" class="btnNavegacion">Ingresar al sistema</a></li>
             </ul>
         </nav>
     </header>
+
     <main>
-        <section class="seccionLogin">
-            <h2>Ingreso al sistema</h2>
-            <form action="administrador.html" method="post">
+        <section class="seccionRequisitos">
+            <h2>Requisitos</h2>
+            <ul>
+                <li>Mayor de 18</li>
+
+                <li>Poseer contactos de referencia en el rubro</li>
+            </ul>
+        </section>
+        <section class="seccionFormulario">
+            <h2>Solicitud de trabajo</h2>
+            <form action="formularioExitoso.html" method="post">
                 <fieldset>
-                    <legend>Inicio de sesión</legend>
+                    <legend>Espacio de solicitud</legend>
                     <div class="cajaEntradaDeDatos">
-                        <label for="cedula">Cédula</label>
-                        <input type="text" id="cedula" name="cedula" autocomplete="username" pattern="[1-9][0-9]{7}"
-                            title="Ingrese exactamente 8 dígitos sin puntos ni guiones" inputmode="numeric"
-                            maxlength="8" required>
+                        <label for="correoElectronico">Correo electrónico</label>
+                        <input type="email" name="correoElectronico" id="correoElectronico"
+                            placeholder="Ingrese su correo electrónico" autocomplete="email" required>
                     </div>
+
                     <div class="cajaEntradaDeDatos">
-                        <label for="clave">Contraseña</label>
-                        <input type="password" id="clave" name="clave" autocomplete="current-password" minlength="12"
+                        <label for="curriculumVitae">Currículum Vitae (PDF)</label>
+                        <input type="file" name="curriculumVitae" id="curriculumVitae" accept=".pdf,application/pdf"
                             required>
                     </div>
-                </fieldset>
 
-                <button type="submit">Iniciar Sesión</button>
+                    <div class="cajaEntradaDeDatos cajaTextarea">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea name="mensaje" id="mensaje" placeholder="Escriba su mensaje" autocomplete="off"
+                            required></textarea>
+                    </div>
+
+                    <div class="cajaEntradaDeDatos cajaCheckbox">
+                        <input type="checkbox" name="aceptaContacto" id="aceptaContacto" required>
+                        <label for="aceptaContacto">Acepto ser contactado por la empresa</label>
+                    </div>
+
+                    <button type="submit">Enviar</button>
+                </fieldset>
             </form>
+
+            <p>Por cualquier duda comunicarse a <a
+                    href="mailto:trabajoGratis@gmail.com"><em>trabajoGratis@gmail.com</em></a>
+                con el asunto "TRABAJO".</p>
         </section>
     </main>
     <a href="#inicio" class="btnSubir">
