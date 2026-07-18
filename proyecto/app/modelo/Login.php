@@ -3,6 +3,7 @@
 class Login {
     private ConsultaUsuario $consultaUsuario;
 
+    //Constructor parametrizado
     public function __construct(ConsultaUsuario $consultaUsuario) {
         $this->consultaUsuario = $consultaUsuario;
     }

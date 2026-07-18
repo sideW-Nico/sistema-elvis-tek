@@ -14,7 +14,7 @@ class ConsultaUsuario {
         $datos = [
             "cedula" => "11111111",
             "claveHash" => password_hash("clave1234567", PASSWORD_DEFAULT),
-            "activo" => true,
+            "activo" => false,
             "administrador" => true,
             "logistica" => false
         ];
