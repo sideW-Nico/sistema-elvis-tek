@@ -268,7 +268,7 @@ function gestionarEmpleado(eventoFormulario) {
  */
 
 //Actualización de la tabla de Empleados al completar el formulario que se encuentra en el modal
-formularioGestionarEmpleado.addEventListener("submit", gestionarEmpleado);
+//formularioGestionarEmpleado.addEventListener("submit", gestionarEmpleado);
 
 //Apertura y cierre del modal
 btnAltaEmpleado.addEventListener("click", abrirAltaEmpleado);

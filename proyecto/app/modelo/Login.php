@@ -1,15 +1,17 @@
 <?php
 
+require_once __DIR__ . "/../modelo/AccesoDatosUsuario.php";
+
 class Login {
-    private ConsultaUsuario $consultaUsuario;
+    private AccesoDatosUsuario $accesoDatosUsuario;
 
     //Constructor parametrizado
-    public function __construct(ConsultaUsuario $consultaUsuario) {
-        $this->consultaUsuario = $consultaUsuario;
+    public function __construct(AccesoDatosUsuario $accesoDatosUsuario) {
+        $this->accesoDatosUsuario = $accesoDatosUsuario;
     }
 
     public function autenticar(string $cedula, string $clave): ?Usuario {
-        $usuario = $this->consultaUsuario->buscarUsuario($cedula);
+        $usuario = $this->accesoDatosUsuario->buscarUsuario($cedula);
 
         if ($usuario === null) {
             return null;

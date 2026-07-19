@@ -92,12 +92,15 @@
                             required>
                     </div>
                 </fieldset>
-
+                <?php
+                    echo "<p>" . ($_GET["error"] ?? "") . "</p>";
+                ?>
                 <button type="submit">
                     Iniciar sesión
                 </button>
             </form>
         </section>
+
     </main>
 
     <a href="#inicio" class="btnSubir">

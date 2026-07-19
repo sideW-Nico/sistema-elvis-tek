@@ -3,12 +3,14 @@
 session_start();
 
 if (!isset($_SESSION["cedula"])) {
-    header("Location: login.php");
+    $mensaje = "Acceso Denegado: Sesión no iniciada";
+    header("Location: login.php?" . "error=" . $mensaje);
     exit;
 }
 
-if ( !isset($_SESSION["administrador"]) || $_SESSION["administrador"] !== true) {
-    header("Location: login.php");
+if ( !isset($_SESSION["administrador"]) || $_SESSION["administrador"] !== true ) {
+    $mensaje = "Acceso Denegado: Rol incorrecto";
+    header("Location: login.php?" . "error=" . $mensaje);
     exit;
 }
 
