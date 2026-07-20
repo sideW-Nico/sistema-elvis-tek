@@ -6,6 +6,10 @@
 class AccesoDatosUsuario {
     private PDO $conexion;
 
+    /**
+     * Constructor parametrizado que recibe una conexión a la base de datos.
+     * @param PDO $conexion La conexion a la base de datos. PRECONDICION: No debe ser NULL.
+     */
     public function __construct (PDO $conexion) {
         $this->conexion = $conexion;
     }

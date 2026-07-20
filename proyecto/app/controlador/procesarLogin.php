@@ -16,11 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 $cedula = trim($_POST["cedula"] ?? "");
 $clave = $_POST["clave"] ?? "";
 
-$conectorPDO = new ConectorPDO ("localhost", "leandro", "123", "elvis");
+$conectorPDO = new ConectorPDO ("localhost", "leandro", "123", "test");
 $conexion = $conectorPDO->establecerConexion();
 
-$accesoDatosUsuario = new AccesoDatosUsuario($conexion);
-$login = new Login($accesoDatosUsuario);
+    $accesoDatosUsuario = new AccesoDatosUsuario($conexion);
+    $login = new Login($accesoDatosUsuario);
 
 $conectorPDO->desconectar();
 
