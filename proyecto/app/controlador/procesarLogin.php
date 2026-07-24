@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 $cedula = trim($_POST["cedula"] ?? "");
 $clave = $_POST["clave"] ?? "";
 
+//Credenciales hardcodeadas, en un futuro van a colocarse en archivos aislados o variables de entorno
 $conectorPDO = new ConectorPDO ("localhost", "leandro", "123", "test");
 $conexion = $conectorPDO->establecerConexion();
 

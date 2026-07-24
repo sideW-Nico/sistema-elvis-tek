@@ -25,7 +25,7 @@ class AccesoDatosUsuario {
             SELECT
                 u.cedula,
                 u.claveHash,
-                u.activo,
+                u.sesionActiva,
 
                 CASE
                     WHEN a.cedula IS NOT NULL THEN 1
@@ -54,6 +54,9 @@ class AccesoDatosUsuario {
 
         $datos = $consulta->fetch(PDO::FETCH_ASSOC);
 
+        //Una vez usada la consulta, desconectar el objeto PDOStatement. https://www.php.net/manual/en/pdo.connections.php
+        $consulta = null;
+
         if ($datos === false) {
             return null;
         }
@@ -61,7 +64,7 @@ class AccesoDatosUsuario {
         return new Usuario(
             $datos["cedula"],
             $datos["claveHash"],
-            (bool) $datos["activo"],
+            (bool) $datos["sesionActiva"],
             (bool) $datos["administrador"],
             (bool) $datos["logistica"]
         );

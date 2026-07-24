@@ -17,7 +17,7 @@ class Login {
             return null;
         }
 
-        if ($usuario->estaActivo()) {
+        if ($usuario->tieneSesionActiva()) {
             return null;
         }
 

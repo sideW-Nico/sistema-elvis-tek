@@ -3,14 +3,14 @@
 class Usuario {
     private string $cedula;
     private string $claveHash;
-    private bool $activo;
+    private bool $sesionActiva;
     private bool $administrador;
     private bool $logistica;
 
-    public function __construct(string $cedula, string $claveHash, bool $activo, bool $administrador, bool $logistica) {
+    public function __construct(string $cedula, string $claveHash, bool $sesionActiva, bool $administrador, bool $logistica) {
         $this->cedula = $cedula;
         $this->claveHash = $claveHash;
-        $this->activo = $activo;
+        $this->sesionActiva = $sesionActiva;
         $this->administrador = $administrador;
         $this->logistica = $logistica;
     }
@@ -23,8 +23,8 @@ class Usuario {
         return $this->claveHash;
     }
 
-    public function estaActivo(): bool {
-        return $this->activo;
+    public function tieneSesionActiva(): bool {
+        return $this->sesionActiva;
     }
 
     public function esAdministrador(): bool {

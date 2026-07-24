@@ -1,7 +1,11 @@
+/*
+    Espacio donde se deberán colocar todas las sentencias utilizadas para crear las tablas.
+*/
+
 CREATE TABLE USUARIO (
     cedula CHAR(8) NOT NULL,
     claveHash VARCHAR(255) NOT NULL,
-    activo BOOLEAN NOT NULL DEFAULT TRUE,
+    sesionActiva BOOLEAN NOT NULL DEFAULT FALSE,
 
     CONSTRAINT pk_usuario
         PRIMARY KEY (cedula)
