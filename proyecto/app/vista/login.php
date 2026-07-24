@@ -93,7 +93,9 @@
                     </div>
                 </fieldset>
                 <?php
-                    echo "<p>" . ($_GET["error"] ?? "") . "</p>";
+                    //htmlspecialchars: Convierte la información del parámetro a texto en bruto para que no pueda ser interpretado como un elemento HTML.
+                    //Previene insercción de código malicioso como <script>codigoMalicioso()</script> y formatos accidentales
+                    echo htmlspecialchars($_GET["error"] ?? "");
                 ?>
                 <button type="submit">
                     Iniciar sesión

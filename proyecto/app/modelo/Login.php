@@ -19,6 +19,7 @@ class Login {
 
         if ($usuario->tieneSesionActiva()) {
             return null;
+            
         }
 
         if ( !password_verify($clave, $usuario->getClaveHash() ) ){
