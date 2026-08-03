@@ -2,7 +2,9 @@
     Espacio donde se deberán colocar todas las insercciones utilizadas en la primer ejecución del programa para el testeo.
 */
 
-INSERT INTO USUARIO (cedula, nombre, apellido, claveHash) VALUES ('11111111', 'Leandro', 'López' '$2y$12$ki0bVkt8cnZuR4v6aJvhhelaeQc1/4fec2txUcuG1Ybr4cvnhg2sS');
+INSERT INTO USUARIO (cedula, nombre, apellido, claveHash) VALUES ('11111111', 'Leandro', 'López', '$2y$12$ki0bVkt8cnZuR4v6aJvhhelaeQc1/4fec2txUcuG1Ybr4cvnhg2sS');
+
+INSERT INTO USUARIO (cedula, nombre, apellido, claveHash) VALUES ('22222222', 'Pepito', 'Alcachofas', '$2y$12$ki0bVkt8cnZuR4v6aJvhhelaeQc1/4fec2txUcuG1Ybr4cvnhg2sS');
 
 /*
     "clave1234567" ~ "$2y$12$ki0bVkt8cnZuR4v6aJvhhelaeQc1/4fec2txUcuG1Ybr4cvnhg2sS"

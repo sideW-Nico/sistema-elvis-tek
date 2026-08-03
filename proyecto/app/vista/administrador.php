@@ -89,8 +89,10 @@
                             if ($roles == "") {
                                 $roles = "Sin rol";
                             }
+                            /* <?php ... ?> vs <?= ... ?> */
                         ?>
 
+                        
                         <tr>
                             <td><?= htmlspecialchars($usuario["cedula"]) ?></td>
                             <td><?= htmlspecialchars($usuario["nombre"]) ?></td>
