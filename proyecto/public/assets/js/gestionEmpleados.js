@@ -278,4 +278,4 @@ btnCerrarGestionarEmpleado.addEventListener("click", cerrarGestionarEmpleado);
 //Para hacer que al apretar escape tambien se eliminen los cambios del formulario, se puede usar el evento 'cancel'
 dialogGestionarEmpleado.addEventListener("cancel", limpiarEstadoGestionarEmpleado);
 
-actualizarTabla();
+//actualizarTabla();

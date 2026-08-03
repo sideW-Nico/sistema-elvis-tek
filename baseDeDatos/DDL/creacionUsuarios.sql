@@ -4,6 +4,8 @@
 
 CREATE TABLE USUARIO (
     cedula CHAR(8) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
     claveHash VARCHAR(255) NOT NULL,
     sesionActiva BOOLEAN NOT NULL DEFAULT FALSE,
 

@@ -63,12 +63,49 @@
                         <th scope="col">Cédula</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Apellido</th>
-                        <th scope="col">Cargo</th>
+                        <th scope="col">Rol</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody id="cuerpoTablaEmpleados">
+                    <?php foreach ($usuarios as $usuario) { ?>
+
+                        <?php
+                            $roles = "";
+
+                            if ($usuario["administrador"] == 1) {
+                                $roles = "Administrador";
+                            }
+
+                            if ($usuario["logistica"] == 1) {
+                                if ($roles != "") {
+                                    $roles = $roles . ", ";
+                                }
+
+                                $roles = $roles . "Logística";
+                            }
+
+                            if ($roles == "") {
+                                $roles = "Sin rol";
+                            }
+                        ?>
+
+                        <tr>
+                            <td><?= htmlspecialchars($usuario["cedula"]) ?></td>
+                            <td><?= htmlspecialchars($usuario["nombre"]) ?></td>
+                            <td><?= htmlspecialchars($usuario["apellido"]) ?></td>
+                            <td><?= htmlspecialchars($roles) ?></td>
+
+                            <td>
+                                <div class="cajaOperaciones">
+                                    <button type="button" class="btnOperacion btnModificar">Modificar</button>
+                                    <button type="button" class="btnOperacion btnEliminar">Eliminar</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                    <?php } ?>
                 </tbody>
             </table>
         </section>

@@ -35,7 +35,7 @@ class ConectorPDO
 };
 
 //Código para depuración
-$ConectorPDO = new ConectorPDO ("localhost:3306", "leandro", "123", "test");
-$ConectorPDO->establecerConexion();
+//$ConectorPDO = new ConectorPDO ("localhost:3306", "leandro", "123", "test");
+//$ConectorPDO->establecerConexion();
 
 ?>

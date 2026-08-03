@@ -28,13 +28,13 @@ class AccesoDatosUsuario {
                 u.sesionActiva,
 
                 CASE
-                    WHEN a.cedula IS NOT NULL THEN 1
-                    ELSE 0
+                    WHEN a.cedula IS NOT NULL THEN TRUE
+                    ELSE FALSE
                 END AS administrador,
 
                 CASE
-                    WHEN l.cedula IS NOT NULL THEN 1
-                    ELSE 0
+                    WHEN l.cedula IS NOT NULL THEN TRUE
+                    ELSE FALSE
                 END AS logistica
 
             FROM USUARIO AS u
@@ -52,22 +52,56 @@ class AccesoDatosUsuario {
 
         $consulta->execute(["cedula" => $cedula]);
 
-        $datos = $consulta->fetch(PDO::FETCH_ASSOC);
+        $usuario = $consulta->fetch(PDO::FETCH_ASSOC);
 
         //Una vez usada la consulta, desconectar el objeto PDOStatement. https://www.php.net/manual/en/pdo.connections.php
         $consulta = null;
 
-        if ($datos === false) {
+        if ($usuario === false) {
             return null;
         }
 
         return new Usuario(
-            $datos["cedula"],
-            $datos["claveHash"],
-            (bool) $datos["sesionActiva"],
-            (bool) $datos["administrador"],
-            (bool) $datos["logistica"]
+            $usuario["cedula"],
+            $usuario["claveHash"],
+            (bool) $usuario["sesionActiva"],
+            (bool) $usuario["administrador"],
+            (bool) $usuario["logistica"]
         );
+    }
+
+    public function listarUsuarios (): array {
+        $sql = "
+            SELECT
+                u.cedula,
+                u.nombre,
+                u.apellido,
+
+                CASE
+                    WHEN a.cedula IS NOT NULL THEN TRUE
+                    ELSE FALSE
+                END AS administrador,
+
+                CASE
+                    WHEN l.cedula IS NOT NULL THEN TRUE
+                    ELSE FALSE
+                END AS logistica
+
+            FROM USUARIO AS u
+
+            LEFT JOIN ADMINISTRADOR AS a
+                ON a.cedula = u.cedula
+
+            LEFT JOIN LOGISTICA AS l
+                ON l.cedula = u.cedula";
+
+        $consulta = $this->conexion->query($sql);
+
+        $usuarios = $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+        $consulta = null;
+
+        return $usuarios;
     }
 }
 
