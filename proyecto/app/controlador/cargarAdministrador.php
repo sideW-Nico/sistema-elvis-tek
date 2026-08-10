@@ -12,4 +12,4 @@ $conexion = $conectorPDO->establecerConexion();
 $conectorPDO->desconectar();
 
 //A diferencia de otros casos, acá se utiliza require_once en vez de header porque se le incluye la lista de usuarios
-require_once __DIR__ . "/../vista/administrador.php";
+require_once RUTA_VISTA . "/administrador.php";

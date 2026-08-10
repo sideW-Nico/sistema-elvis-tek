@@ -11,7 +11,6 @@ if (!isset($_SESSION["cedula"])) {
     exit;
 }
 
-
 if (!($_SESSION["administrador"] ?? false)) {
     $mensaje = "Acceso Denegado: Rol incorrecto";
 

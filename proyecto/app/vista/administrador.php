@@ -175,13 +175,13 @@
                         </div>
 
                         <div class="cajaEntradaDeDatos">
-                            <label for="cargo">
-                                Cargo
+                            <label for="rol">
+                                Rol
                             </label>
 
-                            <select name="cargo" id="cargo" required>
+                            <select name="rol" id="rol" required>
                                 <option value="" disabled selected>
-                                    Seleccione un cargo
+                                    Seleccione un Rol
                                 </option>
 
                                 <option value="Administrador">
