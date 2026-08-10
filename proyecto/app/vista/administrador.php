@@ -89,10 +89,8 @@
                             if ($roles == "") {
                                 $roles = "Sin rol";
                             }
-                            /* <?php ... ?> vs <?= ... ?> */
                         ?>
 
-                        
                         <tr>
                             <td><?= htmlspecialchars($usuario["cedula"]) ?></td>
                             <td><?= htmlspecialchars($usuario["nombre"]) ?></td>
@@ -113,11 +111,12 @@
         </section>
 
         <dialog id="dialogGestionarEmpleado" class="dialogGestionarEmpleado seccionFormulario">
+
             <button class="btnCerrarGestionarEmpleado" id="btnCerrarGestionarEmpleado" type="button">
                 <img src="assets/img/x.svg" alt="Cerrar formulario" class="iconoMenu">
             </button>
 
-            <form action="administrador.php" method="post" id="formularioGestionarEmpleado">
+            <form action="procesarAltaUsuario.php" method="post" id="formularioGestionarEmpleado">
                 <fieldset>
                     <legend>
                         Gestión de empleado
@@ -158,6 +157,24 @@
                         </div>
 
                         <div class="cajaEntradaDeDatos">
+                            <label for="clave">
+                                Contraseña
+                            </label>
+
+                            <input type="password" id="clave" name="clave" autocomplete="new-password" minlength="12"
+                                required>
+                        </div>
+
+                        <div class="cajaEntradaDeDatos">
+                            <label for="confirmarClave">
+                                Confirmar contraseña
+                            </label>
+
+                            <input type="password" id="confirmarClave" name="confirmarClave" autocomplete="new-password"
+                                minlength="12" required>
+                        </div>
+
+                        <div class="cajaEntradaDeDatos">
                             <label for="cargo">
                                 Cargo
                             </label>
@@ -167,20 +184,8 @@
                                     Seleccione un cargo
                                 </option>
 
-                                <option value="Transporte">
-                                    Transporte
-                                </option>
-
-                                <option value="Gestión">
-                                    Gestión
-                                </option>
-
-                                <option value="Administrativo">
-                                    Administrativo
-                                </option>
-
-                                <option value="Depósito">
-                                    Depósito
+                                <option value="Administrador">
+                                    Administrador
                                 </option>
 
                                 <option value="Logística">

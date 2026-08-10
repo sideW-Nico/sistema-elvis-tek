@@ -18,7 +18,7 @@ class ConectorPDO
         $this->conexion = null;
     }
 
-    public function establecerConexion(): PDO {
+    public function establecerConexion(): ?PDO {
         try {
             $this->conexion = new PDO("mysql:host=$this->servername;dbname=$this->dbname", $this->username, $this->password);
             // set the PDO error mode to exception

@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . "/../modelo/ConectorPDO.php";
-require_once __DIR__ . "/../modelo/AccesoDatosUsuario.php";
-require_once __DIR__ . "/../modelo/Usuario.php";
-require_once __DIR__ . "/../modelo/Login.php";
+require_once RUTA_MODELO . "/ConectorPDO.php";
+require_once RUTA_MODELO . "/AccesoDatosUsuario.php";
+require_once RUTA_MODELO . "/Usuario.php";
+require_once RUTA_MODELO . "/Login.php";
 
 //Comprueba que el formulario haya sido enviado mediante POST
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -21,6 +21,12 @@ $clave = $_POST["clave"] ?? "";
 //Credenciales hardcodeadas, en un futuro van a colocarse en archivos aislados o variables de entorno
 $conectorPDO = new ConectorPDO ("localhost:3306", "leandro", "123", "test");
 $conexion = $conectorPDO->establecerConexion();
+
+if ($conexion === null) {
+    $mensaje = "Acceso Denegado: Problemas con la conexión.";
+    header("Location: login.php?error=" . urlencode($mensaje));
+    exit;
+}
 
     $accesoDatosUsuario = new AccesoDatosUsuario($conexion);
     $login = new Login($accesoDatosUsuario);
