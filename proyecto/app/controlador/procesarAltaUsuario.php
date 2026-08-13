@@ -24,10 +24,10 @@ $apellido = trim($_POST["apellido"] ?? "");
 $clave = $_POST["clave"] ?? "";
 $confirmarClave = $_POST["confirmarClave"] ?? "";
 
-$cargo = trim($_POST["cargo"] ?? "");
+$rol = trim($_POST["rol"] ?? "");
 
-if ($cedula === "" || $nombre === "" || $apellido === "" || $clave === "" || $confirmarClave === "" || $cargo === "" ) {
-    $mensaje = "No se pudo registrar el empleado: existen campos vacíos.";
+if ($cedula === "" || $nombre === "" || $apellido === "" || $clave === "" || $confirmarClave === "" || $rol === "" ) {
+    $mensaje = "No se pudo registrar el empleado: existen campos vacíos." . $rol;
     header("Location: administrador.php?error=" . urlencode($mensaje));
     exit;
 }
@@ -68,7 +68,7 @@ if ($conexion === null) {
 
 $altaDatosUsuario = new AltaDatosUsuario($conexion);
 
-$resultado = $altaDatosUsuario->registrarUsuario($cedula, $nombre, $apellido, $claveHash, $cargo);
+$resultado = $altaDatosUsuario->registrarUsuario($cedula, $nombre, $apellido, $claveHash, $rol);
 
 $conectorPDO->desconectar();
 

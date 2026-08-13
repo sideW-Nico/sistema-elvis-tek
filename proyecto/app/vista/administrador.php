@@ -89,6 +89,7 @@
                             if ($roles == "") {
                                 $roles = "Sin rol";
                             }
+                            /* <?php echo $variable ?> equivalente a <?= $variable ?>*/ 
                         ?>
 
                         <tr>
