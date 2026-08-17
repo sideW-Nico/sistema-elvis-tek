@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Clase que simula una recuperación de credenciales correspondientes a la base de datos.
+ * Clase que gestiona credenciales de un usuario en la base de datos.
  */
 class AccesoDatosUsuario {
     private PDO $conexion;
 
     /**
      * Constructor parametrizado que recibe una conexión a la base de datos.
-     * @param PDO $conexion La conexion a la base de datos. PRECONDICION: No debe ser NULL.
+     * @param PDO $conexion La conexion a la base de datos. PRECONDICIÓN: No debe ser NULL.
      */
-    public function __construct (PDO $conexion) {
+    public function __construct(PDO $conexion) {
         $this->conexion = $conexion;
     }
 
@@ -19,8 +19,7 @@ class AccesoDatosUsuario {
      * @param string $cedula La cedula del usuario sin puntos ni guiones.
      * @return Usuario|null Los datos del usuario, retorna su objeto si existe, null en caso contrario.
      */
-    public function buscarUsuario(string $cedula): ?Usuario
-    {
+    public function buscarUsuario(string $cedula): ?Usuario {
         $sql = "
             SELECT
                 u.cedula,
@@ -70,7 +69,7 @@ class AccesoDatosUsuario {
         );
     }
 
-    public function listarUsuarios (): array {
+    public function listarUsuarios(): array {
         $sql = "
             SELECT
                 u.cedula,
@@ -104,5 +103,3 @@ class AccesoDatosUsuario {
         return $usuarios;
     }
 }
-
-?>

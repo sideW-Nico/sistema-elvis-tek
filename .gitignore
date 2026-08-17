@@ -1,0 +1,6 @@
+#Archivos que deberían ignorarse en este repositorio, quitar #
+
+#*.env
+#vendor/
+#composer.phar
+#estudiantes/*

@@ -10,12 +10,10 @@ if (!isset($_SESSION["cedula"])) {
     exit;
 }
 
-if ( !isset($_SESSION["administrador"]) || !($_SESSION["administrador"] ?? false) ) {
+if (!($_SESSION["administrador"] ?? false)) {
     $mensaje = "Acceso Denegado: Rol incorrecto";
     header("Location: login.php?error=" . urlencode($mensaje));
     exit;
 }
 
 require_once RUTA_CONTROLADOR . "/cargarAdministrador.php";
-
-?>

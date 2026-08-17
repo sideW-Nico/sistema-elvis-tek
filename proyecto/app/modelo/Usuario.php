@@ -35,5 +35,3 @@ class Usuario {
         return $this->logistica;
     }
 }
-
-?>

@@ -3,8 +3,14 @@
 require_once RUTA_MODELO . "/ConectorPDO.php";
 require_once RUTA_MODELO . "/AccesoDatosUsuario.php";
 
-$conectorPDO = new ConectorPDO ("localhost:3306", "leandro", "123", "test");
+$conectorPDO = new ConectorPDO($_ENV['DB_HOST'] . ":" . $_ENV['DB_PUERTO'], $_ENV['DB_USUARIO'], $_ENV['DB_CLAVE'], $_ENV['DB_NOMBRE']);
 $conexion = $conectorPDO->establecerConexion();
+
+    if ($conexion === null) {
+        $mensaje = "No se pudo establecer conexión con la base de datos.";
+        header("Location: administrador.php?error=" . urlencode($mensaje));
+        exit;
+    }
 
     $accesoDatosUsuario = new AccesoDatosUsuario($conexion);
     $usuarios = $accesoDatosUsuario->listarUsuarios();

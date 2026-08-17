@@ -53,6 +53,10 @@
                 </button>
             </header>
 
+            <?php //Mejorar cosméticamente en un futuro este tipo de captura información con GET ?>
+            <?= htmlspecialchars($_GET["error"] ?? "") ?>
+            <?= htmlspecialchars($_GET["resultado"] ?? "") ?>
+
             <table>
                 <caption>
                     Listado de empleados registrados
@@ -101,7 +105,14 @@
                             <td>
                                 <div class="cajaOperaciones">
                                     <button type="button" class="btnOperacion btnModificar">Modificar</button>
-                                    <button type="button" class="btnOperacion btnEliminar">Eliminar</button>
+                                    
+                                    <form action="procesarBajaUsuario.php" method="post" class="formularioEliminarEmpleado">
+                                        <input type="hidden" name="cedula" value="<?=htmlspecialchars($usuario["cedula"])?>">
+                                        <input type="hidden" name="csrfToken" value="<?=htmlspecialchars($_SESSION["csrfToken"])?>">
+                                        <button type="submit" class="btnOperacion btnEliminar">Eliminar</button>
+                                    </form>
+                                    
+                                    
                                 </div>
                             </td>
                         </tr>
@@ -117,7 +128,7 @@
                 <img src="assets/img/x.svg" alt="Cerrar formulario" class="iconoMenu">
             </button>
 
-            <form action="procesarAltaUsuario.php" method="post" id="formularioGestionarEmpleado">
+            <form action="procesarGestionUsuario.php" method="post" id="formularioGestionarEmpleado">
                 <fieldset>
                     <legend>
                         Gestión de empleado
@@ -127,6 +138,8 @@
                         <legend>
                             Datos del empleado
                         </legend>
+
+                        <input type="hidden" name="csrfToken" value="<?=htmlspecialchars($_SESSION["csrfToken"])?>">
 
                         <div class="cajaEntradaDeDatos">
                             <label for="cedula">
@@ -196,8 +209,8 @@
                         </div>
                     </fieldset>
 
-                    <button type="submit">
-                        Guardar empleado
+                    <button type="submit" id="btnConfirmarEmpleado">
+                        Confirmar
                     </button>
                 </fieldset>
             </form>

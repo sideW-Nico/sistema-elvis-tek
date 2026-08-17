@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../modelo/AccesoDatosUsuario.php";
+require_once RUTA_MODELO . "/AccesoDatosUsuario.php";
 
 class Login {
     private AccesoDatosUsuario $accesoDatosUsuario;
@@ -29,5 +29,3 @@ class Login {
         return $usuario;
     }
 }
-
-?>

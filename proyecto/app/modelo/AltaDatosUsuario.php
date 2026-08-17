@@ -4,16 +4,14 @@
  * Clase encargada de realizar operaciones de alta
  * relacionadas con los usuarios del sistema.
  */
-class AltaDatosUsuario
-{
+class AltaDatosUsuario {
     private PDO $conexion;
 
     /**
      * Constructor parametrizado que recibe una conexión a la base de datos.
      * @param PDO $conexion La conexión a la base de datos. PRECONDICIÓN: No debe ser NULL.
      */
-    public function __construct(PDO $conexion)
-    {
+    public function __construct(PDO $conexion) {
         $this->conexion = $conexion;
     }
 
@@ -24,12 +22,11 @@ class AltaDatosUsuario
      * @param string $nombre Nombre del usuario.
      * @param string $apellido Apellido del usuario.
      * @param string $claveHash Hash de la contraseña.
-     * @param string $rol Rol del Empleado en el sistema
+     * @param string $rol Rol del empleado en el sistema.
      *
      * @return bool TRUE si el registro se completa correctamente, FALSE en caso contrario.
      */
-    public function registrarUsuario(string $cedula, string $nombre, string $apellido, string $claveHash, string $rol): bool
-    {
+    public function registrarUsuario(string $cedula, string $nombre, string $apellido, string $claveHash, string $rol): bool {
 
         try {
             //Método que ejecuta de forma agrupada todas las instrucciones dirigidas a la base de datos
@@ -75,5 +72,3 @@ class AltaDatosUsuario
         }
     }
 }
-
-?>
