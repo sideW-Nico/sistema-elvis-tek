@@ -25,7 +25,7 @@ const entradaRol = document.getElementById("rol");
 let modoFormulario = "";
 
 //Recupera a través del DOM todos los botones de cada fila. Retorna la colección de elementos.
-const formularios = document.querySelectorAll(".formularioEliminarEmpleado");
+const formulariosEliminar = document.querySelectorAll(".formularioEliminarEmpleado");
 
 
 /**
@@ -98,7 +98,7 @@ function gestionarEmpleado (evento) {
     } else if (modoFormulario === "modificar") {
         formularioGestionarEmpleado.action = "procesarModificarUsuario.php";
     } else {
-        evento.preventDefault();
+        formularioGestionarEmpleado.action = "procesarGestionUsuario.php";
     }
 }
 
@@ -114,6 +114,6 @@ dialogGestionarEmpleado.addEventListener("cancel", limpiarEstadoGestionarEmplead
 formularioGestionarEmpleado.addEventListener("submit", gestionarEmpleado);
 
 //Agrega a cada botón eliminar el evento
-for (const formulario of formularios) {
+for (const formulario of formulariosEliminar) {
     formulario.addEventListener("submit", confirmarEliminación);
 }
