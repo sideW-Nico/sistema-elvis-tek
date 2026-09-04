@@ -210,4 +210,37 @@ class AccesoDatosUsuario {
             return false;
         }
     }
+
+    public function eliminarUsuario(string $cedula): bool {
+
+        try {
+            $this->conexion->beginTransaction();
+
+            $sqlCargo = "DELETE FROM CARGO WHERE cedula = :cedula";
+            $consultaCargo = $this->conexion->prepare($sqlCargo);
+            $consultaCargo->execute(["cedula" => $cedula]);
+
+            $sqlLogistica = "DELETE FROM LOGISTICA WHERE cedula = :cedula";
+            $consultaLogistica = $this->conexion->prepare($sqlLogistica);
+            $consultaLogistica->execute(["cedula" => $cedula]);
+
+            $sqlAdministrador = "DELETE FROM ADMINISTRADOR WHERE cedula = :cedula";
+            $consultaAdministrador = $this->conexion->prepare($sqlAdministrador);
+            $consultaAdministrador->execute(["cedula" => $cedula]);
+
+            $sqlUsuario = "DELETE FROM USUARIO WHERE cedula = :cedula";
+            $consultaUsuario = $this->conexion->prepare($sqlUsuario);
+            $consultaUsuario->execute(["cedula" => $cedula]);
+
+            $this->conexion->commit();
+            return true;
+
+        } catch (PDOException $error) {
+            if ($this->conexion->inTransaction()) {
+                $this->conexion->rollBack();
+            }
+
+            return false;
+        }
+    }
 }
