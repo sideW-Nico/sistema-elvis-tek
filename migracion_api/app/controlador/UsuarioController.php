@@ -1,4 +1,3 @@
-// app/controlador/UsuarioController.php
 <?php
 require_once RUTA_MODELO . "/ConectorPDO.php";
 require_once RUTA_MODELO . "/UsuarioDAO.php";
@@ -20,8 +19,7 @@ class UsuarioController
         match ($metodo) {
             "GET" => $this->listar(),
             "POST" => $this->alta(),
-            //PONER PUT
-            "PATCH" => $this->modificar(),
+            "PUT" => $this->modificar(),
             "DELETE" => $this->baja(),
             default => RespuestaJson::error("Método no permitido", 405),
         };
@@ -31,7 +29,29 @@ class UsuarioController
     {
         $conexion = $this->conectar();
         $dao = new UsuarioDAO($conexion);
-        RespuestaJson::exito($dao->listarUsuarios());
+
+        //Si no viene cédula por GET, se listan todos los usuarios
+        if (!isset($_GET["cedula"])) {
+            RespuestaJson::exito($dao->listarUsuarios());
+            return;
+        }
+
+        //En caso de recibir datos mediante la superglobal, se busca un usuario específico
+        $cedula = trim($_GET["cedula"]);
+
+        if ($cedula === "") {
+            RespuestaJson::error("La cédula es obligatoria", 400);
+            return;
+        }
+
+        $usuario = $dao->listarUsuario($cedula);
+
+        if ($usuario === null) {
+            RespuestaJson::error("El usuario no existe", 404);
+            return;
+        }
+
+        RespuestaJson::exito($usuario);
     }
 
     private function alta(): void
@@ -65,6 +85,7 @@ class UsuarioController
         $conexion = $this->conectar();
         $dao = new UsuarioDAO($conexion);
         $resultado = $dao->registrarUsuario($cedula, $nombre, $apellido, $claveHash, $rol);
+        //AGREGAR DESCONEXIÓN
 
         if (!$resultado) {
             RespuestaJson::error("No se pudo registrar el empleado", 400);

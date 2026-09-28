@@ -4,14 +4,17 @@
  * Clase que unifica todas las operaciones de acceso a datos
  * relacionadas con la entidad Usuario (buscar, listar, alta, baja, modificación).
  */
-class AccesoDatosUsuario {
+class AccesoDatosUsuario
+{
     private PDO $conexion;
 
-    public function __construct(PDO $conexion) {
+    public function __construct(PDO $conexion)
+    {
         $this->conexion = $conexion;
     }
 
-    public function buscarUsuario(string $cedula): ?Usuario {
+    public function buscarUsuario(string $cedula): ?Usuario
+    {
         $sql = "
             SELECT
                 u.cedula,
@@ -61,7 +64,51 @@ class AccesoDatosUsuario {
         );
     }
 
-    public function listarUsuarios(): array {
+    public function listarUsuario(string $cedula): ?array
+    {
+        $sql = "
+        SELECT
+            u.cedula,
+            u.nombre,
+            u.apellido,
+
+            CASE
+                WHEN a.cedula IS NOT NULL THEN TRUE
+                ELSE FALSE
+            END AS administrador,
+
+            CASE
+                WHEN l.cedula IS NOT NULL THEN TRUE
+                ELSE FALSE
+            END AS logistica
+
+        FROM USUARIO AS u
+
+        LEFT JOIN ADMINISTRADOR AS a
+            ON a.cedula = u.cedula
+
+        LEFT JOIN LOGISTICA AS l
+            ON l.cedula = u.cedula
+
+        WHERE u.cedula = :cedula
+    ";
+
+        $consulta = $this->conexion->prepare($sql);
+        $consulta->execute(["cedula" => $cedula]);
+
+        $usuario = $consulta->fetch(PDO::FETCH_ASSOC);
+
+        $consulta = null;
+
+        if ($usuario === false) {
+            return null;
+        }
+
+        return $usuario;
+    }
+
+    public function listarUsuarios(): array
+    {
         $sql = "
             SELECT
                 u.cedula,
@@ -95,7 +142,8 @@ class AccesoDatosUsuario {
         return $usuarios;
     }
 
-    public function registrarUsuario(string $cedula, string $nombre, string $apellido, string $claveHash, string $rol): bool {
+    public function registrarUsuario(string $cedula, string $nombre, string $apellido, string $claveHash, string $rol): bool
+    {
 
         try {
             //Método que ejecuta de forma agrupada todas las instrucciones dirigidas a la base de datos
@@ -119,7 +167,7 @@ class AccesoDatosUsuario {
                     $this->conexion->rollBack();
                     return false;
             }
-            
+
             $consultaRol = $this->conexion->prepare($sqlRol);
 
             $consultaRol->execute(["cedula" => $cedula]);
@@ -141,7 +189,8 @@ class AccesoDatosUsuario {
         }
     }
 
-    public function modificarUsuario(string $cedula, string $nombre, string $apellido, string $claveHash, string $rol): bool {
+    public function modificarUsuario(string $cedula, string $nombre, string $apellido, string $claveHash, string $rol): bool
+    {
         try {
             $this->conexion->beginTransaction();
 
@@ -211,7 +260,8 @@ class AccesoDatosUsuario {
         }
     }
 
-    public function eliminarUsuario(string $cedula): bool {
+    public function eliminarUsuario(string $cedula): bool
+    {
 
         try {
             $this->conexion->beginTransaction();
