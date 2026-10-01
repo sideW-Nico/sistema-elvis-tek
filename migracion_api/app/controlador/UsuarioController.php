@@ -3,16 +3,20 @@ require_once RUTA_MODELO . "/ConectorPDO.php";
 require_once RUTA_MODELO . "/UsuarioDAO.php";
 require_once RUTA_VISTA . "/RespuestaJson.php";
 
+require_once RUTA_NUCLEO . "/Token.php";
+require_once RUTA_NUCLEO . "/Sesion.php";
+
 class UsuarioController
 {
 
     public function gestionar(string $metodo): void
     {
-        if (!isset($_SESSION["cedula"])) {
-            RespuestaJson::error("Acceso denegado: sesión no iniciada", 401);
-        }
-        if (!($_SESSION["administrador"] ?? false)) {
-            RespuestaJson::error("Acceso denegado: rol incorrecto", 403);
+        Sesion::verificarRol("administrador");
+
+        //Forma de controlar a través del token las consultas críticas sobre determinados datos
+        //Puesto que CSRF es para proteger la manipulación de los datos, se permite operar sobre GET sin token
+        if (in_array($metodo, ["POST", "PUT", "DELETE"], true)) {
+            Token::verificarCSRF();
         }
 
         //https://www.w3schools.com/php/php_match.asp
@@ -33,7 +37,6 @@ class UsuarioController
         //Si no viene cédula por GET, se listan todos los usuarios
         if (!isset($_GET["cedula"])) {
             RespuestaJson::exito($dao->listarUsuarios());
-            return;
         }
 
         //En caso de recibir datos mediante la superglobal, se busca un usuario específico
@@ -41,14 +44,12 @@ class UsuarioController
 
         if ($cedula === "") {
             RespuestaJson::error("La cédula es obligatoria", 400);
-            return;
         }
 
         $usuario = $dao->listarUsuario($cedula);
 
         if ($usuario === null) {
             RespuestaJson::error("El usuario no existe", 404);
-            return;
         }
 
         RespuestaJson::exito($usuario);
@@ -56,9 +57,11 @@ class UsuarioController
 
     private function alta(): void
     {
-        $this->verificarCsrf();
+        $datos = json_decode(file_get_contents("php://input"), true);
 
-        $datos = json_decode(file_get_contents("php://input"), true) ?? [];
+        if (!is_array($datos)) {
+            RespuestaJson::error("JSON inválido", 400);
+        }
 
         $cedula = trim($datos["cedula"] ?? "");
         $nombre = trim($datos["nombre"] ?? "");
@@ -96,9 +99,11 @@ class UsuarioController
 
     private function modificar(): void
     {
-        $this->verificarCsrf();
+        $datos = json_decode(file_get_contents("php://input"), true);
 
-        $datos = json_decode(file_get_contents("php://input"), true) ?? [];
+        if (!is_array($datos)) {
+            RespuestaJson::error("JSON inválido", 400);
+        }
 
         $cedula = trim($datos["cedula"] ?? "");
         $nombre = trim($datos["nombre"] ?? "");
@@ -106,8 +111,12 @@ class UsuarioController
         $clave = $datos["clave"] ?? "";
         $rol = trim($datos["rol"] ?? "");
 
-        if ($cedula === "" || $nombre === "" || $apellido === "" || $rol === "") {
+        if ($cedula === "" || $nombre === "" || $apellido === "" || $clave === "" || $rol === "") {
             RespuestaJson::error("Existen campos vacíos", 422);
+        }
+
+        if (!preg_match("/^[1-9][0-9]{7}$/", $cedula)) {
+            RespuestaJson::error("Cédula incorrecta", 422);
         }
 
         $claveHash = password_hash($clave, PASSWORD_DEFAULT);
@@ -125,13 +134,20 @@ class UsuarioController
 
     private function baja(): void
     {
-        $this->verificarCsrf();
+        $datos = json_decode(file_get_contents("php://input"), true);
 
-        $datos = json_decode(file_get_contents("php://input"), true) ?? [];
+        if (!is_array($datos)) {
+            RespuestaJson::error("JSON inválido", 400);
+        }
+        
         $cedula = trim($datos["cedula"] ?? "");
 
         if ($cedula === "") {
             RespuestaJson::error("Falta la cédula del empleado", 422);
+        }
+
+        if (!preg_match("/^[1-9][0-9]{7}$/", $cedula)) {
+            RespuestaJson::error("Cédula incorrecta", 422);
         }
 
         $conexion = $this->conectar();
@@ -145,18 +161,10 @@ class UsuarioController
         RespuestaJson::exito(["mensaje" => "Empleado eliminado exitosamente"]);
     }
 
-    private function verificarCsrf(): void
-    {
-        $token = $_SERVER["HTTP_X_CSRF_TOKEN"] ?? "";
-        if (!isset($_SESSION["csrfToken"]) || !hash_equals($_SESSION["csrfToken"], $token)) {
-            RespuestaJson::error("Solicitud rechazada", 403);
-        }
-    }
-
     private function conectar(): PDO
     {
-        $conector = new ConectorPDO($_ENV["DB_HOST"] . ":" . $_ENV["DB_PUERTO"], $_ENV["DB_USUARIO"], $_ENV["DB_CLAVE"], $_ENV["DB_NOMBRE"]);
-        $conexion = $conector->establecerConexion();
+        $conectorPDO = ConectorPDO::obtenerInstancia($_ENV['DB_HOST'], (int) $_ENV['DB_PUERTO'], $_ENV['DB_USUARIO'], $_ENV['DB_CLAVE'], $_ENV['DB_NOMBRE']);
+        $conexion = $conectorPDO->establecerConexion(); 
         if ($conexion === null) {
             RespuestaJson::error("Error de conexión con la base de datos", 500);
         }

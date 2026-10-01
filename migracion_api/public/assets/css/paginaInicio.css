@@ -1,0 +1,57 @@
+h2 {
+  margin: 0;
+}
+
+.imagenProducto {
+  max-width: 50vw;
+  height: auto;
+}
+
+.cajaTablaCobertura {
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  text-align: center;
+}
+
+.listaProductos, .listaTestimonios {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+
+.listaProductos {
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.listaProductos li figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+}
+
+.listaTestimonios {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.testimonio blockquote {
+  color: var(--medio);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.testimonio {
+  margin: 0;
+}
+
+.testimonio img {
+  max-width: 70px;
+}

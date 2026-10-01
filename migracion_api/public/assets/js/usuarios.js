@@ -4,7 +4,8 @@
 
 //Ruta base de la API
 //CUIDADO = La ruta es relativa al lugar donde se cargó el HTML
-const API_USUARIOS = "./api/usuarios.php";
+const API_USUARIOS = "../api/usuarios.php";
+const API_LOGOUT = "../api/logout.php";
 
 //Constantes para el cuadro de diálogo
 const btnAltaUsuario = document.getElementById("btnAltaUsuario");
@@ -21,11 +22,39 @@ const formularioGestionarUsuario = document.getElementById("formularioGestionarU
 const entradaCedula = document.getElementById("cedula");
 const entradaNombre = document.getElementById("nombre");
 const entradaApellido = document.getElementById("apellido");
-const entradaCargo = document.getElementById("cargo");
+const entradaClave = document.getElementById("clave");
+const entradaConfirmarClave = document.getElementById("confirmarClave");
+const entradaRol = document.getElementById("rol");
+
+const btnCerrarSesion = document.getElementById("btnCerrarSesion");
 
 //Auxiliar para saber si se está agregando o modificando un usuario
 let usuarioEnEdicion = false;
 
+async function cerrarSesion() {
+    try {
+        btnCerrarSesion.disabled = true;
+
+        const respuesta = await fetch(API_LOGOUT,
+            {
+            method: "POST",
+            headers: {
+                "X-CSRF-Token": sessionStorage.getItem("csrfToken") ?? ""
+            }
+        });
+
+        await leerRespuestaAPI(respuesta);
+
+        // Se elimina el token local
+        sessionStorage.removeItem("csrfToken");
+
+        window.location.replace("./login.html");
+    } catch (error) {
+        window.alert(error.message);
+    } finally {
+        btnCerrarSesion.disabled = false;
+    }
+}
 
 /**
  * GESTIÓN DEL ESTADO DEL FORMULARIO / MODAL
@@ -62,13 +91,17 @@ function obtenerDatosFormularioUsuario() {
     const cedula = entradaCedula.value.trim();
     const nombre = entradaNombre.value.trim();
     const apellido = entradaApellido.value.trim();
-    const cargo = entradaCargo.value;
+    const clave = entradaClave.value;
+    const confirmarClave = entradaConfirmarClave.value;
+    const rol = entradaRol.value;
 
     const usuario = {
         cedula: cedula,
         nombre: nombre,
         apellido: apellido,
-        cargo: cargo
+        clave: clave,
+        confirmarClave: confirmarClave,
+        rol: rol
     };
 
     return usuario;
@@ -80,21 +113,38 @@ function obtenerDatosFormularioUsuario() {
  */
 
 
+async function leerRespuestaAPI(respuesta) {
+    const texto = await respuesta.text();
+
+    //
+    if (!texto.trim()) {
+        throw new Error(`La API respondió sin cuerpo (HTTP ${respuesta.status}).`);
+    }
+
+    let json;
+    try {
+        json = JSON.parse(texto);
+    } catch {
+        throw new Error(`HTTP ${respuesta.status}: La API no devolvió JSON.`);
+    }
+    //
+
+    if (!respuesta.ok) {
+        throw new Error(`HTTP ${respuesta.status}: ${json.mensaje ?? "La solicitud no se pudo completar."}`);
+    }
+
+    //Datos proviene de la estructura de la API en el controlador, donde respuesta JSON siempre envuelve todo bajo la clave "datos"
+    return json.datos;
+}
+
+
 /**
  * GET - Obtiene todos los usuarios.
  */
 async function obtenerUsuarios() {
-
     const respuesta = await fetch(API_USUARIOS);
 
-    if (!respuesta.ok) {
-        console.error("No se pudieron obtener los usuarios");
-        return [];
-    }
-
-    const usuarios = await respuesta.json();
-
-    return usuarios;
+    return await leerRespuestaAPI(respuesta);
 }
 
 
@@ -104,38 +154,32 @@ async function obtenerUsuarios() {
  */
 async function obtenerUsuario(cedula) {
 
-    const respuesta = await fetch(`${API_USUARIOS}?cedula=${encodeURIComponent(cedula)}`);
+    const respuesta = await fetch(
+        `${API_USUARIOS}?cedula=${encodeURIComponent(cedula)}`
+    );
 
-    if (!respuesta.ok) {
-        console.error("No se pudo obtener el usuario");
-        return null;
-    }
-
-    const usuario = await respuesta.json();
-
-    return usuario;
+    return await leerRespuestaAPI(respuesta);
 }
 
 
 /**
  * POST -Envía un nuevo usuario a la API.
  */
-async function guardarUsuario(usuario) {
+async function altaUsuario(usuario) {
 
-    const respuesta = await fetch(API_USUARIOS, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(usuario)
-    });
+    const respuesta = await fetch(
+        API_USUARIOS,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": sessionStorage.getItem("csrfToken") ?? ""
+            },
+            body: JSON.stringify(usuario)
+        }
+    );
 
-    if (!respuesta.ok) {
-        console.error("No se pudo guardar el usuario");
-        return false;
-    }
-
-    return true;
+    return await leerRespuestaAPI(respuesta);
 }
 
 
@@ -143,24 +187,28 @@ async function guardarUsuario(usuario) {
  * PUT- Modifica los datos de un usuario existente.
  */
 async function modificarUsuario(usuario) {
+    if (usuario.clave !== usuario.confirmarClave) {
+        throw new Error("Las contraseñas ingresadas no coinciden");
+    }
 
-    const respuesta = await fetch(
-        `${API_USUARIOS}?cedula=${encodeURIComponent(cedula)}`,
+    const respuesta = await fetch(API_USUARIOS,
         {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "X-CSRF-Token": sessionStorage.getItem("csrfToken") ?? ""
             },
-            body: JSON.stringify(usuario)
+            body: JSON.stringify({
+                cedula: usuario.cedula,
+                nombre: usuario.nombre,
+                apellido: usuario.apellido,
+                clave: usuario.clave,
+                rol: usuario.rol
+            })
         }
     );
 
-    if (!respuesta.ok) {
-        console.error("No se pudo modificar el usuario");
-        return false;
-    }
-
-    return true;
+    return await leerRespuestaAPI(respuesta);
 }
 
 
@@ -168,21 +216,32 @@ async function modificarUsuario(usuario) {
  * DELETE - Elimina un usuario según su cédula.
  */
 async function eliminarUsuario(cedula) {
-
-    const respuesta = await fetch(
-        `${API_USUARIOS}?cedula=${encodeURIComponent(cedula)}`,
-        {
-            method: "DELETE"
-        }
-    );
-
-    if (!respuesta.ok) {
-        console.error("No se pudo eliminar el usuario");
+    if (!window.confirm(`¿Está seguro de eliminar al usuario ${cedula}?`)) {
         return;
     }
 
+    try {
+        const respuesta = await fetch(API_USUARIOS,
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": sessionStorage.getItem("csrfToken") ?? ""
+                },
+                body: JSON.stringify({ cedula })
+            }
+        );
+
+        const resultado = await leerRespuestaAPI(respuesta);
+
+        await actualizarTabla();
+        window.alert(`HTTP ${respuesta.status}: ${resultado.mensaje}`);
+    } catch (error) {
+        window.alert(error.message);
+    }
+
     //Una vez eliminado, vuelve a consultar los datos al servidor
-    actualizarTabla();
+
 }
 
 /**
@@ -199,8 +258,8 @@ function agregarFilaUsuario(usuario) {
     campoNombre.textContent = usuario.nombre;
     const campoApellido = document.createElement("td");
     campoApellido.textContent = usuario.apellido;
-    const campoCargo = document.createElement("td");
-    campoCargo.textContent = usuario.cargo;
+    const camporol = document.createElement("td");
+    camporol.textContent = usuario.rol;
 
 
     const campoOperaciones = document.createElement("td");
@@ -229,7 +288,7 @@ function agregarFilaUsuario(usuario) {
     fila.appendChild(campoCedula);
     fila.appendChild(campoNombre);
     fila.appendChild(campoApellido);
-    fila.appendChild(campoCargo);
+    fila.appendChild(camporol);
     fila.appendChild(campoOperaciones);
 
     cuerpoTablaUsuarios.appendChild(fila);
@@ -243,13 +302,18 @@ async function actualizarTabla() {
     //Elimina todas las filas actuales
     cuerpoTablaUsuarios.replaceChildren();
 
-    // GET /api/usuarios
-    const usuarios = await obtenerUsuarios();
+    try {
+        // GET /api/usuarios
+        const usuarios = await obtenerUsuarios();
 
-    //Genera una fila por usuario
-    for (const usuario of usuarios) {
-        agregarFilaUsuario(usuario);
+        //Genera una fila por usuario
+        for (const usuario of usuarios) {
+            agregarFilaUsuario(usuario);
+        }
+    } catch (error) {
+        window.alert("No se pudieron cargar los usuarios: " + error);
     }
+
 }
 
 async function abrirModificarUsuario(cedula) {
@@ -268,7 +332,7 @@ async function abrirModificarUsuario(cedula) {
     entradaCedula.value = usuarioAModificar.cedula;
     entradaNombre.value = usuarioAModificar.nombre;
     entradaApellido.value = usuarioAModificar.apellido;
-    entradaCargo.value = usuarioAModificar.cargo;
+    entradaRol.value = usuarioAModificar.rol;
     entradaCedula.readOnly = true;
 
     dialogGestionarUsuario.showModal();
@@ -280,22 +344,25 @@ async function abrirModificarUsuario(cedula) {
  */
 async function gestionarUsuario(eventoFormulario) {
     eventoFormulario.preventDefault();
-    const usuario = obtenerDatosFormularioUsuario();
 
-    if (!usuarioEnEdicion) { // POST /api/usuarios
-        const guardadoCorrectamente = await guardarUsuario(usuario);
-        if (!guardadoCorrectamente) {
-            return;
+    try {
+        const usuario = obtenerDatosFormularioUsuario();
+
+        if (!usuarioEnEdicion) { // POST /api/usuarios
+            await altaUsuario(usuario);
         }
-    }
-    else { //PUT /api/usuarios/{cedula}
-        const modificadoCorrectamente = await modificarUsuario(usuario);
-        if (!modificadoCorrectamente) {
-            return;
+        else { //PUT /api/usuarios/{cedula}
+            const modificadoCorrectamente = await modificarUsuario(usuario);
+            if (!modificadoCorrectamente) {
+                return;
+            }
         }
+
+        cerrarGestionarUsuario();
+        await actualizarTabla();
+    } catch (error) {
+        window.alert(error.message);
     }
-    cerrarGestionarUsuario();
-    await actualizarTabla();
 }
 
 
@@ -314,6 +381,8 @@ btnCerrarGestionarUsuario.addEventListener("click", cerrarGestionarUsuario);
 
 //Al presionar Escape se limpia el estado del formulario
 dialogGestionarUsuario.addEventListener("cancel", limpiarEstadoGestionarUsuario);
+
+btnCerrarSesion.addEventListener("click", cerrarSesion);
 
 // GET /api/usuarios
 actualizarTabla();

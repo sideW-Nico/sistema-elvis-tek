@@ -4,7 +4,7 @@
  * Clase que unifica todas las operaciones de acceso a datos
  * relacionadas con la entidad Usuario (buscar, listar, alta, baja, modificación).
  */
-class AccesoDatosUsuario
+class UsuarioDAO
 {
     private PDO $conexion;
 
@@ -73,14 +73,10 @@ class AccesoDatosUsuario
             u.apellido,
 
             CASE
-                WHEN a.cedula IS NOT NULL THEN TRUE
-                ELSE FALSE
-            END AS administrador,
-
-            CASE
-                WHEN l.cedula IS NOT NULL THEN TRUE
-                ELSE FALSE
-            END AS logistica
+                WHEN a.cedula IS NOT NULL THEN 'Administrador'
+                WHEN l.cedula IS NOT NULL THEN 'Logística'
+                ELSE ''
+            END AS rol
 
         FROM USUARIO AS u
 
@@ -116,14 +112,10 @@ class AccesoDatosUsuario
                 u.apellido,
 
                 CASE
-                    WHEN a.cedula IS NOT NULL THEN TRUE
-                    ELSE FALSE
-                END AS administrador,
-
-                CASE
-                    WHEN l.cedula IS NOT NULL THEN TRUE
-                    ELSE FALSE
-                END AS logistica
+                    WHEN a.cedula IS NOT NULL THEN 'Administrador'
+                    WHEN l.cedula IS NOT NULL THEN 'Logística'
+                    ELSE ''
+                END AS rol
 
             FROM USUARIO AS u
 
