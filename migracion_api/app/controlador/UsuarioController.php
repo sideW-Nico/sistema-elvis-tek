@@ -31,28 +31,43 @@ class UsuarioController
 
     private function listar(): void
     {
-        $conexion = $this->conectar();
-        $dao = new UsuarioDAO($conexion);
-
-        //Si no viene cédula por GET, se listan todos los usuarios
-        if (!isset($_GET["cedula"])) {
-            RespuestaJson::exito($dao->listarUsuarios());
+        if (isset($_GET["cedula"])) {
+            //En caso de recibir datos mediante la superglobal, se busca un usuario específico
+            $this->listarUsuario(trim($_GET["cedula"]));
+        } else {
+            $this->listarUsuarios();
         }
+        
+    }
 
-        //En caso de recibir datos mediante la superglobal, se busca un usuario específico
-        $cedula = trim($_GET["cedula"]);
-
+    private function listarUsuario(string $cedula): void
+    {
         if ($cedula === "") {
             RespuestaJson::error("La cédula es obligatoria", 400);
         }
 
+        if (!preg_match("/^[1-9][0-9]{7}$/", $cedula)) {
+            RespuestaJson::error("Cédula incorrecta", 422);
+        }
+
+        $conexion = Conexion::conectar();
+        $dao = new UsuarioDAO($conexion);
         $usuario = $dao->listarUsuario($cedula);
+        Conexion::desconectar();
 
         if ($usuario === null) {
             RespuestaJson::error("El usuario no existe", 404);
         }
 
         RespuestaJson::exito($usuario);
+    }
+
+    private function listarUsuarios(): void
+    {
+        $conexion = Conexion::conectar();
+        $dao = new UsuarioDAO($conexion);
+        RespuestaJson::exito($dao->listarUsuarios());
+        Conexion::desconectar();
     }
 
     private function alta(): void
@@ -85,10 +100,10 @@ class UsuarioController
 
         $claveHash = password_hash($clave, PASSWORD_DEFAULT);
 
-        $conexion = $this->conectar();
+        $conexion = Conexion::conectar();
         $dao = new UsuarioDAO($conexion);
         $resultado = $dao->registrarUsuario($cedula, $nombre, $apellido, $claveHash, $rol);
-        //AGREGAR DESCONEXIÓN
+        Conexion::desconectar();
 
         if (!$resultado) {
             RespuestaJson::error("No se pudo registrar el empleado", 400);
@@ -121,9 +136,10 @@ class UsuarioController
 
         $claveHash = password_hash($clave, PASSWORD_DEFAULT);
 
-        $conexion = $this->conectar();
+        $conexion = Conexion::conectar();
         $dao = new UsuarioDAO($conexion);
         $resultado = $dao->modificarUsuario($cedula, $nombre, $apellido, $claveHash, $rol);
+        Conexion::desconectar();
 
         if (!$resultado) {
             RespuestaJson::error("No se pudo modificar el empleado", 400);
@@ -150,9 +166,10 @@ class UsuarioController
             RespuestaJson::error("Cédula incorrecta", 422);
         }
 
-        $conexion = $this->conectar();
+        $conexion = Conexion::conectar();
         $dao = new UsuarioDAO($conexion);
         $resultado = $dao->eliminarUsuario($cedula);
+        Conexion::desconectar();
 
         if (!$resultado) {
             RespuestaJson::error("No se pudo eliminar el empleado", 400);
@@ -161,13 +178,4 @@ class UsuarioController
         RespuestaJson::exito(["mensaje" => "Empleado eliminado exitosamente"]);
     }
 
-    private function conectar(): PDO
-    {
-        $conectorPDO = ConectorPDO::obtenerInstancia($_ENV['DB_HOST'], (int) $_ENV['DB_PUERTO'], $_ENV['DB_USUARIO'], $_ENV['DB_CLAVE'], $_ENV['DB_NOMBRE']);
-        $conexion = $conectorPDO->establecerConexion(); 
-        if ($conexion === null) {
-            RespuestaJson::error("Error de conexión con la base de datos", 500);
-        }
-        return $conexion;
-    }
 }

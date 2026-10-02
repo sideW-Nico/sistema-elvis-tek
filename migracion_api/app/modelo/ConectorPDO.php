@@ -3,6 +3,7 @@
 //LEER ATENTAMENTE CÓMO SE CONFIGURA TANTO EN LINUX COMO EN WINDOWS
 //Especificar en php.ini el extension_dir (debe apuntar a ext) y la extension pdo_mysql para este caso
 
+//SINGLETON
 class ConectorPDO {
     private string $servername;
     private int $port;

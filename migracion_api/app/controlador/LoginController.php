@@ -3,6 +3,7 @@ require_once RUTA_MODELO . "/ConectorPDO.php";
 require_once RUTA_MODELO . "/UsuarioDAO.php";
 require_once RUTA_VISTA . "/RespuestaJson.php";
 
+require_once RUTA_NUCLEO . "/Conexion.php";
 require_once RUTA_NUCLEO . "/Token.php";
 require_once RUTA_NUCLEO . "/Sesion.php";
 
@@ -27,9 +28,10 @@ class LoginController
             RespuestaJson::error("Cédula y contraseña son obligatorias", 422);
         }
 
-        $conexion = $this->conectar();
+        $conexion = Conexion::conectar();
         $dao = new UsuarioDAO($conexion);
         $usuario = $dao->buscarUsuario($cedula);
+        Conexion::desconectar();
 
         if ($usuario === null || !password_verify($clave, $usuario->getClaveHash())) {
             RespuestaJson::error("Usuario o credenciales incorrectas", 401);
@@ -60,14 +62,6 @@ class LoginController
         RespuestaJson::exito(["mensaje" => "Sesión cerrada correctamente"]);
     }
 
-    private function conectar(): PDO
-    {
-        $conectorPDO = ConectorPDO::obtenerInstancia($_ENV['DB_HOST'], (int) $_ENV['DB_PUERTO'], $_ENV['DB_USUARIO'], $_ENV['DB_CLAVE'], $_ENV['DB_NOMBRE']);
-        $conexion = $conectorPDO->establecerConexion();
-        if ($conexion === null) {
-            RespuestaJson::error("Error de conexión con la base de datos", 500);
-        }
-        return $conexion;
-    }
+    
 }
 
