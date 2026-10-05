@@ -38,6 +38,10 @@ class LoginController
             RespuestaJson::error("Usuario o credenciales incorrectas", 401);
         }
 
+        if (!$usuario->esAdministrador()) {
+            RespuestaJson::error("Acceso denegado: No tiene permisos según rol.", 403);
+        }
+
         Sesion::iniciar($usuario);
         Token::generarTokenCSRF();
 
