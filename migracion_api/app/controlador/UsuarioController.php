@@ -54,6 +54,7 @@ class UsuarioController
         $conexion = Conexion::conectar();
         $dao = new UsuarioDAO($conexion);
         $usuario = $dao->listarUsuario($cedula);
+        unset($dao, $conexion);
         Conexion::desconectar();
 
         if ($usuario === null) {
@@ -67,8 +68,11 @@ class UsuarioController
     {
         $conexion = Conexion::conectar();
         $dao = new UsuarioDAO($conexion);
-        RespuestaJson::exito($dao->listarUsuarios());
+        $usuarios = $dao->listarUsuarios();
+        unset($dao, $conexion);
         Conexion::desconectar();
+        RespuestaJson::exito($usuarios);
+        
     }
 
     private function alta(): void
@@ -104,6 +108,7 @@ class UsuarioController
         $conexion = Conexion::conectar();
         $dao = new UsuarioDAO($conexion);
         $resultado = $dao->registrarUsuario($cedula, $nombre, $apellido, $claveHash, $rol);
+        unset($dao, $conexion);
         Conexion::desconectar();
 
         if (!$resultado) {
@@ -140,6 +145,7 @@ class UsuarioController
         $conexion = Conexion::conectar();
         $dao = new UsuarioDAO($conexion);
         $resultado = $dao->modificarUsuario($cedula, $nombre, $apellido, $claveHash, $rol);
+        unset($dao, $conexion);
         Conexion::desconectar();
 
         if (!$resultado) {
@@ -170,6 +176,7 @@ class UsuarioController
         $conexion = Conexion::conectar();
         $dao = new UsuarioDAO($conexion);
         $resultado = $dao->eliminarUsuario($cedula);
+        unset($dao, $conexion);
         Conexion::desconectar();
 
         if (!$resultado) {

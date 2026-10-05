@@ -31,6 +31,7 @@ class LoginController
         $conexion = Conexion::conectar();
         $dao = new UsuarioDAO($conexion);
         $usuario = $dao->buscarUsuario($cedula);
+        unset($dao, $conexion);
         Conexion::desconectar();
 
         if ($usuario === null || !password_verify($clave, $usuario->getClaveHash())) {
