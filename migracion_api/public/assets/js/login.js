@@ -1,4 +1,4 @@
-const API_LOGIN = "../api/login.php";
+const API_LOGIN = "../index.php/login.php?ruta=login";
 
 const formularioLogin = document.getElementById("formularioLogin");
 

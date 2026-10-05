@@ -4,8 +4,8 @@
 
 //Ruta base de la API
 //CUIDADO = La ruta es relativa al lugar donde se cargó el HTML
-const API_USUARIOS = "../api/usuarios.php";
-const API_LOGOUT = "../api/logout.php";
+const API_USUARIOS = "../index.php/usuarios.php?ruta=usuarios";
+const API_LOGOUT = "../index.php/logout.php?ruta=logout";
 
 //Constantes para el cuadro de diálogo
 const btnAltaUsuario = document.getElementById("btnAltaUsuario");
@@ -155,7 +155,8 @@ async function obtenerUsuarios() {
 async function obtenerUsuario(cedula) {
 
     const respuesta = await fetch(
-        `${API_USUARIOS}?cedula=${encodeURIComponent(cedula)}`
+        //Se usa ampersand (&) para concatenar más datos al URL actual
+        `${API_USUARIOS}&cedula=${encodeURIComponent(cedula)}`
     );
 
     return await leerRespuestaAPI(respuesta);
