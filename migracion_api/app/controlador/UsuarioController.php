@@ -3,6 +3,7 @@ require_once RUTA_MODELO . "/ConectorPDO.php";
 require_once RUTA_MODELO . "/UsuarioDAO.php";
 require_once RUTA_VISTA . "/RespuestaJson.php";
 
+require_once RUTA_NUCLEO . "/Conexion.php";
 require_once RUTA_NUCLEO . "/Token.php";
 require_once RUTA_NUCLEO . "/Sesion.php";
 

@@ -37,10 +37,6 @@ class LoginController
             RespuestaJson::error("Usuario o credenciales incorrectas", 401);
         }
 
-        if (!$usuario->esAdministrador()) {
-            RespuestaJson::error("Acceso denegado: no tiene privilegios de administrador", 403);
-        }
-
         Sesion::iniciar($usuario);
         Token::generarTokenCSRF();
 

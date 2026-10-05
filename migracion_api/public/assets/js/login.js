@@ -46,6 +46,7 @@ async function gestionarLogin(eventoFormulario) {
         //Guardamos el token en la sesión
         sessionStorage.setItem("csrfToken", sesion.csrfToken)
         //replace() abre la siguiente página borrando el historial de la previa
+        window.alert("Sesión iniciada exitosamente.")
         window.location.replace("./administrador.html");
     } catch (error) {
         window.alert(error.message);
