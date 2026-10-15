@@ -3,9 +3,9 @@
  */
 
 //Ruta base de la API
-//CUIDADO = La ruta es relativa al lugar donde se cargó el HTML
-const API_USUARIOS = "../index.php/usuarios.php?ruta=usuarios";
-const API_LOGOUT = "../index.php/logout.php?ruta=logout";
+
+const API_USUARIOS = "/usuarios";
+const API_LOGOUT = "/logout";
 
 //Constantes para el cuadro de diálogo
 const btnAltaUsuario = document.getElementById("btnAltaUsuario");
@@ -37,11 +37,11 @@ async function cerrarSesion() {
 
         const respuesta = await fetch(API_LOGOUT,
             {
-            method: "POST",
-            headers: {
-                "X-CSRF-Token": sessionStorage.getItem("csrfToken") ?? ""
-            }
-        });
+                method: "POST",
+                headers: {
+                    "X-CSRF-Token": sessionStorage.getItem("csrfToken") ?? ""
+                }
+            });
 
         await leerRespuestaAPI(respuesta);
 
@@ -153,11 +153,7 @@ async function obtenerUsuarios() {
  * GET - Obtiene un usuario específico mediante su cédula.
  */
 async function obtenerUsuario(cedula) {
-
-    const respuesta = await fetch(
-        //Se usa ampersand (&) para concatenar más datos al URL actual
-        `${API_USUARIOS}&cedula=${encodeURIComponent(cedula)}`
-    );
+    const respuesta = await fetch(`${API_USUARIOS}/${encodeURIComponent(cedula)}`);
 
     return await leerRespuestaAPI(respuesta);
 }
@@ -192,7 +188,8 @@ async function modificarUsuario(usuario) {
         throw new Error("Las contraseñas ingresadas no coinciden");
     }
 
-    const respuesta = await fetch(API_USUARIOS,
+    const respuesta = await fetch(
+        `${API_USUARIOS}/${encodeURIComponent(usuario.cedula)}`,
         {
             method: "PUT",
             headers: {
@@ -200,7 +197,6 @@ async function modificarUsuario(usuario) {
                 "X-CSRF-Token": sessionStorage.getItem("csrfToken") ?? ""
             },
             body: JSON.stringify({
-                cedula: usuario.cedula,
                 nombre: usuario.nombre,
                 apellido: usuario.apellido,
                 clave: usuario.clave,
@@ -222,14 +218,13 @@ async function eliminarUsuario(cedula) {
     }
 
     try {
-        const respuesta = await fetch(API_USUARIOS,
+        const respuesta = await fetch(
+            `${API_USUARIOS}/${encodeURIComponent(cedula)}`,
             {
                 method: "DELETE",
                 headers: {
-                    "Content-Type": "application/json",
                     "X-CSRF-Token": sessionStorage.getItem("csrfToken") ?? ""
-                },
-                body: JSON.stringify({ cedula })
+                }
             }
         );
 
@@ -300,12 +295,12 @@ function agregarFilaUsuario(usuario) {
  * Solicita los usuarios nuevamente a la API y genera las filas.
  */
 async function actualizarTabla() {
-    //Elimina todas las filas actuales
-    cuerpoTablaUsuarios.replaceChildren();
-
     try {
-        // GET /api/usuarios
+        // GET /usuarios
         const usuarios = await obtenerUsuarios();
+
+        //Elimina todas las filas actuales
+        cuerpoTablaUsuarios.replaceChildren();
 
         //Genera una fila por usuario
         for (const usuario of usuarios) {
@@ -318,25 +313,25 @@ async function actualizarTabla() {
 }
 
 async function abrirModificarUsuario(cedula) {
+    try {
+        const usuarioAModificar = await obtenerUsuario(cedula);
 
-    usuarioEnEdicion = true;
+        if (usuarioAModificar === null) {
+            throw new Error("El usuario no existe.");
+        }
 
-    // GET /api/usuarios/{cedula}
-    const usuarioAModificar = await obtenerUsuario(cedula);
+        entradaCedula.value = usuarioAModificar.cedula;
+        entradaNombre.value = usuarioAModificar.nombre;
+        entradaApellido.value = usuarioAModificar.apellido;
+        entradaRol.value = usuarioAModificar.rol;
 
-    //Si el usuario no existe o hubo un error
-    if (usuarioAModificar === null) {
-        return;
+        entradaCedula.readOnly = true;
+        usuarioEnEdicion = true;
+
+        dialogGestionarUsuario.showModal();
+    } catch (error) {
+        window.alert(error.message);
     }
-
-    //Se cargan en el formulario los datos recibidos desde la API.
-    entradaCedula.value = usuarioAModificar.cedula;
-    entradaNombre.value = usuarioAModificar.nombre;
-    entradaApellido.value = usuarioAModificar.apellido;
-    entradaRol.value = usuarioAModificar.rol;
-    entradaCedula.readOnly = true;
-
-    dialogGestionarUsuario.showModal();
 }
 
 
@@ -349,10 +344,10 @@ async function gestionarUsuario(eventoFormulario) {
     try {
         const usuario = obtenerDatosFormularioUsuario();
 
-        if (!usuarioEnEdicion) { // POST /api/usuarios
+        if (!usuarioEnEdicion) { // POST /usuarios
             await altaUsuario(usuario);
         }
-        else { //PUT /api/usuarios/{cedula}
+        else { //PUT /usuarios/{cedula}
             const modificadoCorrectamente = await modificarUsuario(usuario);
             if (!modificadoCorrectamente) {
                 return;
@@ -385,7 +380,7 @@ dialogGestionarUsuario.addEventListener("cancel", limpiarEstadoGestionarUsuario)
 
 btnCerrarSesion.addEventListener("click", cerrarSesion);
 
-// GET /api/usuarios
+// GET /usuarios
 actualizarTabla();
 
 /**

@@ -9,8 +9,16 @@ require_once RUTA_NUCLEO . "/Sesion.php";
 
 class UsuarioController
 {
+    /*
+        Contrato URI
+        GET         /usuarios
+        GET         /usuarios/{cedula}
+        POST        /usuarios
+        PUT         /usuarios/{cedula}
+        DELETE      /usuarios/{cedula}
+     */
 
-    public function gestionar(string $metodo): void
+    public function gestionar(string $metodo, string $cedula): void
     {
         Sesion::verificarRol("administrador");
 
@@ -20,25 +28,33 @@ class UsuarioController
             Token::verificarCSRF();
         }
 
+        // A partir de si posee una cédula, verifica los métodos permitidos para dicha petición
+        $metodosPermitidos = $cedula === "" ? ["GET", "POST"] : ["GET", "PUT", "DELETE"];
+
+        if (!in_array($metodo, $metodosPermitidos, true)) {
+            RespuestaJson::error("Método no permitido", 405);
+        }
+
+
         //https://www.w3schools.com/php/php_match.asp
         match ($metodo) {
-            "GET" => $this->listar(),
+            "GET" => $this->listar($cedula),
             "POST" => $this->alta(),
-            "PUT" => $this->modificar(),
-            "DELETE" => $this->baja(),
+            "PUT" => $this->modificar($cedula),
+            "DELETE" => $this->baja($cedula),
             default => RespuestaJson::error("Método no permitido", 405),
         };
     }
 
-    private function listar(): void
+    private function listar(string $cedula): void
     {
-        if (isset($_GET["cedula"])) {
+        if ($cedula !== "") {
             //En caso de recibir datos mediante la superglobal, se busca un usuario específico
-            $this->listarUsuario(trim($_GET["cedula"]));
+            $this->listarUsuario($cedula);
         } else {
             $this->listarUsuarios();
         }
-        
+
     }
 
     private function listarUsuario(string $cedula): void
@@ -72,7 +88,6 @@ class UsuarioController
         unset($dao, $conexion);
         Conexion::desconectar();
         RespuestaJson::exito($usuarios);
-        
     }
 
     private function alta(): void
@@ -118,7 +133,7 @@ class UsuarioController
         RespuestaJson::exito(["mensaje" => "Empleado ingresado exitosamente"], 201);
     }
 
-    private function modificar(): void
+    private function modificar($cedula): void
     {
         $datos = json_decode(file_get_contents("php://input"), true);
 
@@ -126,7 +141,6 @@ class UsuarioController
             RespuestaJson::error("JSON inválido", 400);
         }
 
-        $cedula = trim($datos["cedula"] ?? "");
         $nombre = trim($datos["nombre"] ?? "");
         $apellido = trim($datos["apellido"] ?? "");
         $clave = $datos["clave"] ?? "";
@@ -155,16 +169,8 @@ class UsuarioController
         RespuestaJson::exito(["mensaje" => "Empleado modificado exitosamente"]);
     }
 
-    private function baja(): void
+    private function baja($cedula): void
     {
-        $datos = json_decode(file_get_contents("php://input"), true);
-
-        if (!is_array($datos)) {
-            RespuestaJson::error("JSON inválido", 400);
-        }
-        
-        $cedula = trim($datos["cedula"] ?? "");
-
         if ($cedula === "") {
             RespuestaJson::error("Falta la cédula del empleado", 422);
         }
