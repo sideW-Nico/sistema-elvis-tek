@@ -21,7 +21,12 @@ require_once RUTA_RAIZ . "/vendor/autoload.php";
   Tu navegador es TONTO y no soporta el poder del pato.
 </audio>
 
-<script src="assets/js/pato.js"></script> <?php
+<audio id="halloweenAudio">
+  <source src="/proyecto/public/assets/snd/bong.wav" type="audio/mpeg">
+  Tu navegador es TONTO y no soporta el poder del miedo.
+</audio>
+
+<script src="assets/js/sonido.js"></script> <?php
 
 //Genera una estructura que se almacenará en la memoria estática para guardar las variables de entorno
 $dotenv = Dotenv\Dotenv::createImmutable(RUTA_RAIZ);

@@ -1,4 +1,3 @@
-// app/vista/RespuestaJson.php
 <?php
 class RespuestaJson {
     public static function exito($datos, int $status = 200): void {
